@@ -5,9 +5,10 @@ In diesem Leitfaden erfahren Sie, wie Projektstandorte im Rahmen des „Natürli
 
 
 ## Übersicht
-Das Ziel des Leitfadens ist es Sie beim Erfassen und übermitteln von Projektstandorten zu unterstützen.
-Dazu bieten wir Ihnen ein Online Validations Werkzeug in dem Sie Ihre Eingaben sowie die Standorte selbständig überprüfen können bevor Sie diese einreichen.
-Zielgruppe dieses  Leitfadens sind alle die Standortdaten im Rahmen des Projektes "Natürlicher Klimaschutz in Kommunen" einreichen oder prüfen.
+Das Ziel des Leitfadens ist es Sie beim Erfassen und Übermitteln von Projektstandorten zu unterstützen.  
+Zu diesem Zweck stellen wir Ihnen eine auf die jeweiligen Maßnahmen zugeschnittene Excel-Vorlage zur Erfassung der erforderlichen Daten sowie ein Online-Validierungstool zur Verfügung.  
+Das Tool erlaubt es Ihnen, Ihre Angaben und die Standorte vor der Einreichung selbstständig zu überprüfen.  
+Dieser Leitfaden richtet sich an alle, die im Rahmen des Projekts „Natürlicher Klimaschutz in Kommunen“ Standortdaten einreichen.
 
 
 **Inhaltübersicht**
@@ -18,10 +19,10 @@ Zielgruppe dieses  Leitfadens sind alle die Standortdaten im Rahmen des Projekte
 - [Datenvalidator](./validation_nkk.md)
 - [Haftungsausschluss](./disclaimer_nkk.md)
 
-**Anhang 1**
-Enthält die Excelfiles zur Maßnahmendokumentation die im Datenvalidator geprüft werden können.
+**Anhang 1**  
+Enthält die Excel Vorlagen zur Maßnahmendokumentation die im Datenvalidator geprüft werden können. 
 - [Excel Vorlagen](./annex1_nkk.md)
 
-**Anhang 2**
-Enthält detaillierte Beschreibungen aller Felder aus dem Datenmodell, die automatisch aus unserem JSON-Schema extrahiert wurden. 
+**Anhang 2**  
+Enthält eine detaillierte Beschreibungen aller Felder aus dem Datenmodell, die automatisch aus dem JSON-Schema extrahiert wurden.   
 - [Projekt-Kernschema](schemas/project_core_schema_nkk.md)
