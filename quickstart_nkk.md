@@ -1,7 +1,7 @@
 # Natürlicher Klimaschutz in Kommunen
 
 Willkommen!  
-In diesem Leitfaden erfahren Sie, wie Projektstandorte im Rahmen des „Natürlichen Klimaschutzes in Kommunen“ korrekt erfasst und bereitgestellt werden.
+In diesem Leitfaden erfahren Sie, wie Projektstandorte im Rahmen des „Natürlichen Klimaschutzes in Kommunen“ korrekt erfasst und eingereicht werden.
 
 
 ## Übersicht
@@ -11,17 +11,17 @@ Zielgruppe dieses  Leitfadens sind alle die Standortdaten im Rahmen des Projekte
 
 
 **Inhaltübersicht**
+
+- [Natürlicher Klimaschutz in Kommunen](./quickstart_nkk.md)
 - [Einführung](./introduction_nkk.md)
-- [Data Collection Guidelines](./collection_nkk.md)
-- [Validation Process](./validation_nkk.md)
+- [Leitfaden zur Datenerhebung](./collection_nkk.md)
+- [Datenvalidator](./validation_nkk.md)
 - [Haftungsausschluss](./disclaimer_nkk.md)
 
-**Annex 1**
-Contains Excel Templates to collect (attribute) data according to our model
-- [Excel Templates](./annex1.md)
+**Anhang 1**
+Enthält die Excelfiles zur Maßnahmendokumentation die im Datenvalidator geprüft werden können.
+- [Excel Vorlagen](./annex1_nkk.md)
 
-**Annex 2**
-Contains detailled descriptions of all fields from the datamodel automatically extracted from our json schema. 
-- [Project Core Schema (EN)](./schemas/project_core_schema_en.md)
-- [Project Core Schema (FR)](./schemas/project_core_schema_fr.md)
-- [Feature Project Schema](./schemas/feature_project_schema.md)
+**Anhang 2**
+Enthält detaillierte Beschreibungen aller Felder aus dem Datenmodell, die automatisch aus unserem JSON-Schema extrahiert wurden. 
+- [Projekt-Kernschema](schemas/project_core_schema_nkk.md)
