@@ -2,9 +2,9 @@
 
 ## Allgemein
 
-Im Folgenden erfahren Sie welche Ansprüche Standortdaten in der Datenerfassung des Projekts  "Natürlicher Klimaschutz in Kommunen" erfüllen müssen.
-Es ist erforderlich dass Geodaten sich einer Zuschusszusage, einer Maßnahme und einem Berichtszeitpunkt zuordnen lassen.
-Die Datenerfassung unterscheidet sich je nach Art der Geodaten die erfasst werden.
+Im Folgenden erfahren Sie, welche Ansprüche Standortdaten in der Datenerfassung des Projekts  "Natürlicher Klimaschutz in Kommunen" erfüllen müssen.
+Es ist erforderlich, dass Geodaten sich einer Zuschusszusage, einer Maßnahme und einem Berichtszeitpunkt zuordnen lassen.
+Die Datenerfassung unterscheidet sich je nach Art der Geodaten, die erfasst werden.
 
 ## Punktreferenzierte Maßnahmen
 Der Vereinfachte Prozess, bei dem nur Geokoordinaten manuell in einer Excel erfasst werden können, ist für folgende Maßnahmen anwendbar:
