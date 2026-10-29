@@ -1,10 +1,10 @@
 # Leitfaden zur Datenerhebung
 
 ## Allgemein
-Alle Georeferenzen müssen in WGS 84 (EPSG 4326) Koordinatenreferenzsystem(CRS) erfasst werden, Standorte die in einem Abweichenden CRS erfasst werden, können den falschen Standort abbilden.
+Alle Georeferenzen müssen in **WGS 84 (EPSG 4326)** Koordinatenreferenzsystem (CRS) erfasst werden, Standorte, die in einem abweichenden CRS erfasst werden, können den falschen Standort abbilden.
 Dies gilt es unbedingt zu vermeiden.
 
-Koordinaten (Spalten „Breitengrad“ und „Längengrad“) in der Excelvorlage müssen im Dezimalformat mit einer Genauigkeit von mindestens 5 Stellen nach dem Trennzeichen angegeben werden (d. h. 00,00000).
+Die Koordinaten (Spalten „Breitengrad“ und „Längengrad“) in der Excelvorlage müssen im Dezimalformat mit einer Genauigkeit von mindestens 5 Stellen nach dem Trennzeichen angegeben werden (d. h. 00,00000).
 
 ## Punktreferenzierte Maßnahmen
 Folgende Maßnahmen können als Punktreferenz angegeben werden:
@@ -12,8 +12,8 @@ Folgende Maßnahmen können als Punktreferenz angegeben werden:
 * Maßnahme B.3 – Einzelbaumpflanzung (exklusive Sträucher, Hecken)
 * Maßnahme B.4 – Standortoptimierung von Bestandsbäumen
 
-Für die Erfassung von Punktstandorten können derzeit die Datenformate .XLSX und .GeoJSON eingereicht werden.
-Für die Erfassung von Punktstandorten ist die Verwendung von .GeoJSON optional, wird jedoch aufgrund seiner Zuverlässigkeit und Flexibilität empfohlen.
+Für die Erfassung von Punktstandorten können derzeit die Datenformate XLSX und GeoJSON eingereicht werden.
+Für die Erfassung von Punktstandorten ist die Verwendung von GeoJSON optional, wird jedoch aufgrund seiner Zuverlässigkeit und Flexibilität empfohlen.
 
 
 ## Flächen- und Linienreferenzierte Maßnahmen
@@ -28,6 +28,7 @@ Folgende Maßnahmen können als Flächen- und/ oder Linienreferenzierte angegebe
 * Maßnahme C.5 – Renaturierung von Kleingewässern
 * Maßnahme D.2 – Entsiegelungsmaßnahme
 
-Für die Erfassung von Linien- oder Polygonstandorten wird ausschließlich das GeoJSON-Format akzeptiert.
-Um das Format einzuhalten wird empfohlen die Excel-Vorlage zur Erfassung der Maßnahmenbezogenen Daten zu verwenden und diese dann mit einer GIS Software mit den Objektflächen/ Linien zusammen zu führen.
-Eine Basis Anleitung wie eine Zusammenführung in Q-GIS geschehen kann finden Sie hier.
+Für die Erfassung von Linien- oder Polygonstandorten wird ausschließlich das GeoJSON-Formats akzeptiert.
+Um das Format einzuhalten, wird empfohlen die Excel-Vorlage zur Erfassung der Maßnahmenbezogenen Daten zu verwenden und diese dann mit einer GIS Software mit den Objektflächen/ Linien zusammen zu führen.
+Eine Basis Anleitung wie eine Zusammenführung in Q-GIS geschehen kann finden Sie [hier] (/NKK444_qgis_merge_instructions.pdf).
+
