@@ -14,5 +14,5 @@ Fax: +49 69 7431 2944
 Diese Arbeit ist das Ergebnis der Arbeit der Mitarbeiter der KfW-Entwicklungsbank unter Einbeziehung externer Beiträge. Die in dieser Arbeit dargelegten Erkenntnisse, Interpretationen und Schlussfolgerungen spiegeln nicht unbedingt die Ansichten der KfW-Entwicklungsbank, ihres Vorstands oder der von ihnen vertretenen Regierungen wider. Die KfW-Entwicklungsbank übernimmt keine Gewähr für die Richtigkeit der in dieser Arbeit enthaltenen Daten.
 Weitere Mitwirkende finden Sie hier.
 
-# Other contributors:
+# Weitere Mitwirkende:
 [MAPME Community of Practice](https://www.mapme-initiative.org/)
