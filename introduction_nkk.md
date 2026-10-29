@@ -14,7 +14,8 @@ Der Vereinfachte Prozess, bei dem nur Geokoordinaten manuell in einer Excel erfa
 * Maßnahme B.4 – Standortoptimierung von Bestandsbäumen
 
 Im Bereitgestellten Validator können Sie Ihre Excel hochladen, prüfen und automatisch eine georeferenzierte Datei zur Einreichung erstellen. 
-Eine Erklärung dazu finden sie im Kapitel "Leitfaden zur Datenerhebung"
+Eine Erklärung dazu finden sie im Kapitel "Leitfaden zur Datenerhebung"  
+>Bitte beachten Sie bei der Angabe "Baumart", unbedingt die durch die ["Liste nicht förderfähiger Gehölze"](https://www.kfw.de/PDF/Download-Center/F%C3%B6rderprogramme-(Inlandsf%C3%B6rderung)/PDF-Dokumente/6000005113_M_444_Anhang_1_Mindestanforderungen.pdf) ausgeschlossenen Arten!
 
 ## Flächen- und Linienreferenzierte Maßnahmen
 
@@ -27,6 +28,8 @@ Für folgende Maßnahmen ist die Erfassung von Flächen oder Linien zur Standort
 * Maßnahme C.4 – urbane Wälder
 * Maßnahme C.5 – Renaturierung von Kleingewässern
 * Maßnahme D.2 – Entsiegelungsmaßnahme
+
+>Angaben zu "Biotoptyp Code" und "Biotoptypwert" entnehmen Sie bitte der[ *"Bundeskompensationsverordnung - BKompV, Anlage 2 (zu § 5 Absatz 1) Liste der Biotoptypen und -werte"*](https://www.gesetze-im-internet.de/bkompv/anlage_2.html).
 
 Sollten Sie keine Vorkenntnisse zum Erfassen von Geodaten haben, finden Sie eine 
 Anleitung im "Leitfaden zur Datenerhebung".
