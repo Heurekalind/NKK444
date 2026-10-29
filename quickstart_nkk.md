@@ -10,19 +10,23 @@ Zu diesem Zweck stellen wir Ihnen eine auf die jeweiligen Maßnahmen zugeschnitt
 Das Tool erlaubt es Ihnen, Ihre Angaben und die Standorte vor der Einreichung selbstständig zu überprüfen.  
 Dieser Leitfaden richtet sich an alle, die im Rahmen des Projekts „Natürlicher Klimaschutz in Kommunen“ Standortdaten einreichen.
 
-
-**Inhaltübersicht**
-
+### Inhaltübersicht
 - [Natürlicher Klimaschutz in Kommunen](./quickstart_nkk.md)
 - [Einführung](./introduction_nkk.md)
 - [Leitfaden zur Datenerhebung](./collection_nkk.md)
 - [Datenvalidator](./validation_nkk.md)
 - [Haftungsausschluss](./disclaimer_nkk.md)
 
-**Anhang 1**  
+
+
+### Links  
+- [Liste nicht förderfähiger Gehölze](https://www.kfw.de/PDF/Download-Center/F%C3%B6rderprogramme-(Inlandsf%C3%B6rderung)/PDF-Dokumente/6000005113_M_444_Anhang_1_Mindestanforderungen.pdf)
+- [ *Bundeskompensationsverordnung - BKompV, Anlage 2 (zu § 5 Absatz 1) Liste der Biotoptypen und -werte*](https://www.gesetze-im-internet.de/bkompv/anlage_2.html).
+
+### Anhang 1  
 Enthält die Excel Vorlagen zur Maßnahmendokumentation die im Datenvalidator geprüft werden können. 
 - [Excel Vorlagen](./annex1_nkk.md)
 
-**Anhang 2**  
+### Anhang 2   
 Enthält eine detaillierte Beschreibungen aller Felder aus dem Datenmodell, die automatisch aus dem JSON-Schema extrahiert wurden.   
 - [Projekt-Kernschema](schemas/project_core_schema_nkk.md)
