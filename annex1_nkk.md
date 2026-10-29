@@ -1,5 +1,5 @@
 # Anhang 1: Excel-Vorlagen für die Erfassung von Maßnahmenstandorten
 
-[Punkreferenziert](project-location-validator/Project_Location_Data_Template_EN_V04.xlsx)
+[Punkreferenziert](_/NKK444_point_data_template.xlsx)
 
-[Flächen- und Linienreferenziert](project-location-validator/Project_Location_Data_Template_EN_V04.xlsx)
+[Flächen- und Linienreferenziert](_/NKK444_poly_data_template.xlsx)
