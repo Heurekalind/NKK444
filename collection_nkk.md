@@ -10,7 +10,7 @@ Folgende Maßnahmen können als Punktreferenz angegeben werden:
 * Maßnahme B.3 – Einzelbaumpflanzung (exklusive Sträucher, Hecken)
 * Maßnahme B.4 – Standortoptimierung von Bestandsbäumen
 
-Die Koordinaten (Spalten „Breitengrad“ und „Längengrad“) in der Excelvorlage müssen im Dezimalformat mit einer Genauigkeit von mindestens 5 Stellen nach dem Trennzeichen angegeben werden (d. h. 00,00000).
+Die Koordinaten (Spalten „Breitengrad“ und „Längengrad“) in der Excelvorlage müssen im Dezimalformat mit einer Genauigkeit von mindestens 5 Stellen nach dem Trennzeichen angegeben werden (d. h. 00,00000).  
 Für die Erfassung von Punktstandorten können derzeit die Datenformate XLSX und GeoJSON eingereicht werden.
 Für die Erfassung von Punktstandorten ist die Verwendung von GeoJSON optional, wird jedoch aufgrund seiner Zuverlässigkeit und Flexibilität empfohlen.
 
