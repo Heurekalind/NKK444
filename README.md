@@ -70,5 +70,6 @@ This needs to be checked by the validator.
 
 ## To be added 
 NKK444_qgis_merge_instructions.pdf
-Create a project core schema for the NKK templates presumably based on json_schema_for_humans 
+- Create a project core schema for the NKK templates presumably based on json_schema_for_humans 
 (german translation to be done by Heurekalind)
+-PDF Guide for QGIS merge ( to be done by Heurekalind)
