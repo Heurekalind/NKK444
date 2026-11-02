@@ -3,12 +3,13 @@ Inputs for Datavalidator NKK444
 
 ## Description of Excel Templates
 
-The maschine readable colnames are hidden in row six, there are descriptive colnames in row sevent that can be removed, similar to the test row in the *Project location data* template.
+The machine-readable column names are hidden in row six; row seven contains descriptive column names in german that can be removed, similar to the test row in the *Project Location Data* template.
 
 
 ### NKK444_point_data_template.xlsx
-This template is only used to collect point data.
+This template is intended solely for recording point data, most of which is entered manually by users.
 
+cols:
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
 intervention_ident (B2;B3(Einzelbaumpflanzung);B4)  
@@ -24,6 +25,7 @@ longitude (float -180 to 180)
 validation_values contains list of excluded_plants
 
 ### NKK444_poly_data_template.xlsx
+This template is used to capture polygon data. 
 
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
