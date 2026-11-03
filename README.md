@@ -30,11 +30,18 @@ This template is used to capture polygon data.
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
 intervention_ident (B2;B3(Einzelbaumpflanzung);B4)  
-report_date (date)  
-area_size ( int 1 to 99999999999999)  
-biotope_type ( validation_values, bitope_codes)  
-bitope_grade (int 0 to 24)  
-mean_biotope_grade (0 to 24, Excel formula calculates mean_biotope_grade where all records share the same grant_number and the same report_date; uses area_size as the weight.)  
+report_date_pre (date)
+report_date_post (date)
+report_date_prog (date, autofill always 2045)
+area_size ( int 1 to 99999999999999)
+biotope_type ( validation_values -> bitope_codes)
+bitope_grade_pre (int 0 to 24)
+biotope_grade_post (int 0 to 24)
+bitope_grade_prog (int 0 to 24)
+mean_biotope_grade_pre (0 to 24)
+mean_biotope_grade_prog ( 0 to 24)
+biotope_grade_confirmation (TRUE biotoptype_grade_pre < biotopetype_grade_prog)
+ (FALSE biotoptype_grade_pre > biotopetype_grade_prog)
 latitude (float -90 to 90)  
 longitude (float -180 to 180)  
 merge_id (string, grant_number_intervention_ident)  
@@ -58,10 +65,7 @@ All uploads should be checkt for:
 ### NKK444_poly_data_template.xlsx
 - To add the geometries there is a slightly reworked process (See PDF)
   This process would require the poly file to have a dummy geometry in the geojson??
-- Check that there are three different report_date entries for each merge_id
-- The dates show, before intervention, after intervention and prognosis(2045).
-The mean_biotope_grade for the prognosis year has to be > than before intervention.
-This needs to be checked by the validator.
+-The column biotope_grade_confirmation has to show TRUE, since the Biotopetype has to improve between pre intervention and prognosis.
 
 
 
