@@ -6,7 +6,7 @@ Inputs for Datavalidator NKK444
 The machine-readable column names are hidden in row six; row seven contains descriptive column names in german that can be removed, similar to the test row in the *Project Location Data* template.
 
 
-### NKK444_point_data_template.xlsx
+### 1) NKK444_point_data_template.xlsx
 This template is intended solely for recording point data, most of which is entered manually by users.
 
 cols:
@@ -22,9 +22,9 @@ latitude (float -90 to 90)
 longitude (float -180 to 180)  
 
 **Second sheet**
-validation_values contains list of excluded_plants
+validation_values contains list of excluded_plants for flags in excel
 
-### NKK444_poly_data_template.xlsx
+### 2) NKK444_poly_data_template.xlsx
 This template is used to capture polygon data. 
 
 nkk_objectnumber(int max 5)  
@@ -52,27 +52,31 @@ validation_values contains bitope codes
 ## Validator verification rules
 
 ### General 
+Can be closely based on the FZ Locations.
 All uploads should be checkt for:
 - correct number of cols
 - correct col names (nothing added, changed or removed)
 - completness of row entries
 
-### NKK444_point_data_template.xlsx
+### 1) NKK444_point_data_template.xlsx
 
-- non eligible shrubs
+- The Genus_species_global_tree_search_clean.csv provides allowed entries for the *species* column
+- The excluded_plants.csv contains species that are not eligible for a grant.
 - Check valid long lat columns
 
-### NKK444_poly_data_template.xlsx
-- To add the geometries there is a slightly reworked process (See PDF)
-  This process would require the poly file to have a dummy geometry in the geojson??
--The column biotope_grade_confirmation has to show TRUE, since the Biotopetype has to improve between pre intervention and prognosis.
+#### Error handeling/outputs
 
+- If an entry in *species* is not on the list of Genus_species_global_tree_search_clean.csv print the entry and note " Bitte geben Sie den Gattungs und Artnamen nach den Bestimmungen aus der Dokumentation ein. Achten Sie auch auf Tippfehler."
+- If an entry in *species* matches an entry in excluded_plants.csv print the entry and note "Die Liste nicht förderbarer Gehölze schließt die folgenden Einreichungen aus:**eintrag/einträge**.
+  Bitte entfernen Sie diese aus dem Template und reichen nur förderbare Gehölze ein."
+  
+### 2) NKK444_poly_data_template.xlsx
+- 
 
 
 ## Nice to have:
 
 	1. I would like a map only depicting germany if possible.
-	2. Could we add a flag if the entry in the column "species" in NKK_point.xlsx almost matches the validation_value excluded plants. We cant really deny upload but at least remind them to check the Liste nicht förderfähiger Gehölze 
 
 ## To be added 
 NKK444_qgis_merge_instructions.pdf
