@@ -6,8 +6,11 @@ In diesem Leitfaden erfahren Sie, wie Projektstandorte im Rahmen des „Natürli
 
 ## Übersicht
 Das Ziel des Leitfadens ist es Sie beim Erfassen und Übermitteln von Projektstandorten zu unterstützen.  
-Zu diesem Zweck stellen wir Ihnen eine auf die jeweiligen Maßnahmen zugeschnittene Excel-Vorlage zur Erfassung der erforderlichen Daten sowie ein Online-Validierungstool zur Verfügung.  
-Das Tool erlaubt es Ihnen, Ihre Angaben und die Standorte vor der Einreichung selbstständig zu überprüfen.  
+Zu diesem Zweck stellen wir Ihnen eine auf die jeweiligen Maßnahmen zugeschnittene Excel-Vorlagen zur Erfassung der erforderlichen Daten zur Verfügung.  
+Für einen Teil der Maßnahmen ist es erforderlich, dass Standortflächen mit einer GIS Software der Excelvorlage zugefügt werden.
+Auf welche Maßnahmen dies zutrifft, und wie Sie je nach Maßnahme vorgehen, erfahren Sie auf den folgenden Seiten.
+
+Zudem finden Sie im Folgendem ein Online Tool zur selbstständigen Überprüfung ihrer Angaben sowie der zugehörigen Standorte.
 Dieser Leitfaden richtet sich an alle, die im Rahmen des Projekts „Natürlicher Klimaschutz in Kommunen“ Standortdaten einreichen.
 
 ### Inhaltübersicht
