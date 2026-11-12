@@ -24,12 +24,14 @@ longitude (float -180 to 180)
 **Second sheet**
 validation_values contains list of excluded_plants for flags in excel
 
-### 2) NKK444_poly_data_template.xlsx
+### 2) NKK444_poly_data_template_pre.xlsx
+### 2) NKK444_poly_data_template_post.xlsx
+### 2) NKK444_poly_data_template_prog.xlsx
 This template is used to capture polygon data. 
 
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
-intervention_ident (B2;B3(Einzelbaumpflanzung);B4)  
+intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
 report_date_pre (date)
 report_date_post (date)
 report_date_prog (date, autofill always 2045)
@@ -71,12 +73,11 @@ All uploads should be checkt for:
   Bitte entfernen Sie diese aus dem Template und reichen nur förderbare Gehölze ein."
   
 ### 2) NKK444_poly_data_template.xlsx
-- 
+- Three files must be submitted
+- Number of actual geometries must match the number_subareas column.If the column is there.
 
-
-## Nice to have:
-
-	1. I would like a map only depicting germany if possible.
+## Map
+Map of germany
 
 ## To be added 
 NKK444_qgis_merge_instructions.pdf
