@@ -2,7 +2,7 @@
 Sie sind angehalten, Ihre Daten vor der Übermittlung an die KfW zu validieren.  
 Dazu stellen wir Ihnen den Online-Validator bereit den Sie im Browser nutzen können.  
 Es können Excel und GeoJSON Dateien hochladen und geprüft werden.
-Die Prüfung gibt Ihnen einen Hinweis, falls der eingereichte Datensatz nicht den Vorgaben entspricht und an welcher Stelle nachgebessert werden muss.  
+Die Prüfung gibt Ihnen einen Hinweis, sollte der eingereichte Datensatz nicht den Vorgaben entsprechen, und an welcher Stelle nachgebessert werden muss.  
 Zudem werden die von Ihnen angegebenen Standorte in der Karte visualisiert und Sie können diese auf Plausibilität und Vollständigkeit prüfen.
 Fehler sollten in der Originaldatei mithilfe von Excel oder GIS-Software korrigiert werden. Nach der Korrektur können Sie ihre Datei erneut überprüfen.
 Wenn alle Anforderungen erfüllt sind, können Sie sich automatisch einen E-Mailentwurf zur Einreichung erstellen lassen.
