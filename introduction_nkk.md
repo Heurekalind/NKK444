@@ -10,7 +10,7 @@ Die Datenerfassung unterscheidet sich je nach Art der Geodaten, die erfasst werd
 Der Vereinfachte Prozess, bei dem nur Geokoordinaten manuell in einer Excel erfasst werden können, ist für folgende Maßnahmen anwendbar:
 
 * Maßnahme B.2 – Straßenbaumpflanzung
-* Maßnahme B.3 – Einzelbaumpflanzung (exklusive Sträucher, Hecken)
+* Maßnahme B.3 – B3EB Einzelbaumpflanzung (exklusive Sträucher, Hecken)
 * Maßnahme B.4 – Standortoptimierung von Bestandsbäumen
 
 Im Bereitgestellten Validator können Sie Ihre Excel hochladen, prüfen und automatisch eine georeferenzierte Datei zur Einreichung erstellen. 
@@ -29,7 +29,7 @@ Für folgende Maßnahmen ist die Erfassung von Flächen oder Linien zur Standort
 * Maßnahme C.5 – Renaturierung von Kleingewässern
 * Maßnahme D.2 – Entsiegelungsmaßnahme
 
->Angaben zu "Biotoptyp Code" und "Biotoptypwert" entnehmen Sie bitte der[ *"Bundeskompensationsverordnung - BKompV, Anlage 2 (zu § 5 Absatz 1) Liste der Biotoptypen und -werte"*](https://www.gesetze-im-internet.de/bkompv/anlage_2.html).
+>Angaben zu "Biotoptyp Code" entnehmen Sie bitte der[ *"Bundeskompensationsverordnung - BKompV, Anlage 2 (zu § 5 Absatz 1) Liste der Biotoptypen und -werte"*](https://www.gesetze-im-internet.de/bkompv/anlage_2.html).
 
 Sollten Sie keine Vorkenntnisse zum Erfassen von Geodaten haben, finden Sie eine 
 Anleitung im "Leitfaden zur Datenerhebung".
