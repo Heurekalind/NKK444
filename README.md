@@ -121,7 +121,7 @@ Area _size_pre can split during intervention into x sub-areas
 	sum(sub_area_size_prog) == area_size_pre
 
 - Biotope_code 
-- Biotope_grade = lookup(biotope_code)
+- Biotope_grade = lookup(biotope_codes.csv)
 
 In case the original area splits during intervention the weighted mean of the biotope grades, for the subareas is to be calculated.  
 grade_mean = sum(grade_i * subarea_i) / sum(subarea_i) 
