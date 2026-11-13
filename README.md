@@ -78,7 +78,9 @@ All uploads should be checkt for:
 - Basemap of Germany searchable by city, street name, and ZIP code
 - Drawing points and multipolygons
 - Auto-zoom on uploaded objects
-- All the inputs listed are compulsory 
+- The data should be sent via automated draft email to the administrator,
+  as they need to carry out additional checks before the data can be provided to the BfN (via ODP?)
+- All the inputs listed are compulsory
 
 ## Point Data Inputs and logic - Direct Input 
 
