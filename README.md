@@ -17,7 +17,7 @@ nkk_objectnumber(int max 5)
 grant_numbter (int 0 to 99999999)  
 intervention_ident (B2;B3EB;B4)  
 report_date (date)  
-species (any value, excel cobtains color flag in case exact equal to validation_value, excluded_plants)  
+species (any value, excel obtains color flag in case exact equal to validation_value, excluded_plants)  
 diameter (int 1 to 999)  
 planting_year (int 1900 to 2999)  
 plant_age (0 to 50)  
@@ -32,26 +32,37 @@ validation_values contains list of excluded_plants for flags in excel
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)
-
-merge_id (string, grant_number_intervention_ident)  
+start_intervention (int 2017 to 2070)  
+report_date_pre (date)  
+area_size ( int 1 to 99999999999999)  
+biotope_code_pre = lookup(validation_values, biotope_codes)  
+biotope_grade_pre = lookup(validation_values, biotope_codes according to bitope_grade_pre)  
+merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")   
 
 ### b) NKK444_poly_data_template_post.xlsx
-nkk_objectnumber(int max 5)  
+nkk_objectnumber(int max 5)   
 grant_numbter (int 0 to 99999999)  
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
-
-merge_id (string, grant_number_intervention_ident)  
+start_intervention (int 2017 to 2070)  
+report_date_post (date)  
+area_size_post1 to 6 ( int 1 to 99999999999999)  
+biotope_code_post1 to 6 = lookup(validation_values, biotope_codes)  
+biotope_grade_post1 to 6 = lookup(validation_values, biotope_codes according to bitope_grade_post)  
+merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")   
 
 ### c) NKK444_poly_data_template_prog.xlsx
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
-
-merge_id (string, grant_number_intervention_ident)  
-This template is used to capture polygon data. 
+start_intervention (int 2017 to 2070)  
+report_date_prog (date)  
+area_size_prog1 to 6 ( int 1 to 99999999999999)  
+biotope_code_prog1 to 6 = lookup(validation_values, biotope_codes)  
+biotope_grade_prog1 to 6 = lookup(validation_values, biotope_codes according to bitope_grade_prog)  
+merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")    
 
 **Second sheet**
-validation_values contains bitope codes
+validation_values contains bitope_codes and biotope_grades
 
 ## Validator verification 
 
@@ -70,7 +81,8 @@ All uploads should be checkt for:
   
 ### 2) NKK444_poly_data_template.xlsx
 - Three files must be submitted
-- Number of actual geometries must match the number_subareas column.If the column is there.
+- Number of actual geometries must match the number_subareas column within each file.
+  	- Only File two and three contain subareas.
 
 # Part 2. Direct input
 
@@ -122,8 +134,8 @@ Area _size_pre can split during intervention into x sub-areas
 - area_size_prog ( int 1 to 99999999999999)
 	sum(sub_area_size_prog) == area_size_pre
 
-- Biotope_code 
-- Biotope_grade = lookup(biotope_codes.csv)
+- biotope_code (for each area/subareas)
+- biotope_grade = lookup(biotope_codes.csv)
 
 In case the original area splits during intervention the weighted mean of the biotope grades, for the subareas is to be calculated.  
 grade_mean = sum(grade_i * subarea_i) / sum(subarea_i) 
@@ -132,7 +144,7 @@ The grades / mean grades need follow
 - grade_pre < mean_grade_post
 - mean_grade_post < mean_grade_prog
 
-- merge_id (string, grant_number_intervention_ident) 
+- merge_id (string, "grant_number"_"intervention_ident"_"start_intervention"_"nkk_objectnumber") 
 Does not identify subareas.
 
 ### Error handeling/outputs
@@ -147,3 +159,8 @@ Does not identify subareas.
 - Create a project core schema for the NKK templates presumably based on json_schema_for_humans 
 (german translation to be done by Heurekalind?)
 - PDF Guide for QGIS merge NKK444_qgis_merge_instructions.pdf ( to be done by Heurekalind)
+
+# Visualisations
+
+<img width="365" height="347" alt="image" src="https://github.com/user-attachments/assets/8ddac4cb-0373-4e4b-968b-1204414a71ef" />
+
