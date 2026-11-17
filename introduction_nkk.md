@@ -30,6 +30,7 @@ Für folgende Maßnahmen ist die Erfassung von Flächen oder Linien zur Standort
 * Maßnahme D.2 – Entsiegelungsmaßnahme
 
 >Angaben zu "Biotoptyp Code" entnehmen Sie bitte der[ *"Bundeskompensationsverordnung - BKompV, Anlage 2 (zu § 5 Absatz 1) Liste der Biotoptypen und -werte"*](https://www.gesetze-im-internet.de/bkompv/anlage_2.html).
+>Da Biotoptypencodes und -werte je nach Quelle variiren können, **nehmen Sie unbedingt Bezug auf die bereitgestellte Anlage 2.**
 
 Sollten Sie keine Vorkenntnisse zum Erfassen von Geodaten haben, finden Sie eine 
 Anleitung im "Leitfaden zur Datenerhebung".
