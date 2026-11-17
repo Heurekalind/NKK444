@@ -29,8 +29,9 @@ Folgende Maßnahmen können als Flächen- und/ oder Linienreferenzierte angegebe
 * Maßnahme D.2 – Entsiegelungsmaßnahme
   
 >Angaben zu "Biotoptyp Code" entnehmen Sie bitte der[ *"Bundeskompensationsverordnung - BKompV, Anlage 2 (zu § 5 Absatz 1) Liste der Biotoptypen und -werte"*](https://www.gesetze-im-internet.de/bkompv/anlage_2.html).
+>Biotoptypencodes und -werte können je nach Quelle variieren daher nehmen Sie unbedingt Bezug auf die bereitgestellte Anlage 2.
 
 Für die Erfassung von Linien- oder Polygonstandorten wird ausschließlich das GeoJSON-Formats akzeptiert.
-Um das Format einzuhalten, wird empfohlen die Excel-Vorlage zur Erfassung der Maßnahmenbezogenen Daten zu verwenden und diese dann mit einer GIS Software mit den Objektflächen/ Linien zusammen zu führen.
+Um das Format einzuhalten, wird empfohlen die Excel-Vorlage zur Erfassung der Maßnahmenbezogenen Daten zu verwenden und diese dann mit einer GIS Software mit den Objektflächen/ Linien zusammen zu führen.  
 Eine Basis Anleitung wie eine Zusammenführung in Q-GIS geschehen kann finden Sie [hier] (/NKK444_qgis_merge_instructions.pdf).
 
