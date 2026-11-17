@@ -11,7 +11,7 @@ Für einen Teil der Maßnahmen ist es erforderlich, dass Standortflächen mit ei
 Auf welche Maßnahmen dies zutrifft, und wie Sie je nach Maßnahme vorgehen, erfahren Sie auf den folgenden Seiten.
 
 Zudem finden Sie im Folgendem ein Online Tool zur selbstständigen Überprüfung ihrer Angaben sowie der zugehörigen Standorte.  
-Darüber hinaus können Sie die geprüften Dateien mittels einer automatisch erzeugten Email direkt weiterleiten.
+Darüber hinaus können Sie die geprüften Dateien mittels einer automatisch erzeugten Email direkt weiterleiten.  
 Dieser Leitfaden richtet sich an alle, die im Rahmen des Projekts „Natürlicher Klimaschutz in Kommunen“ Standortdaten einreichen.
 
 ### Inhaltübersicht
