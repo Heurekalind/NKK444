@@ -147,13 +147,17 @@ The grades / mean grades need follow
 Does not identify subareas.
 
 ## Outputs/ Generated Email
-nkk_email_template.md
+
 The generated Email should contain:
-1. Generated/ validated Geojson  
-2a) Validated Excel Template  
-2b) In case of direct input a table of *merge_id* + validated items, either:
+1. Email Text *nkk_email_template.md*
+2. Generated/ validated Geojson  
+3a) Validated Excel Template  
+3b) In case of direct input a table of *merge_id* + validated items, either:
 - *species*
 - *area_size, biotope_codes, biotope_grades* including *pre,post,prog* and *subareas*
+  
+File naming convention for attachments:  
+"grant_number"_"intervention_ident"_"start_intervention"_"date".extension
 
 ## Error handeling/outputs
 
