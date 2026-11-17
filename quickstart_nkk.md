@@ -10,7 +10,8 @@ Zu diesem Zweck stellen wir Ihnen eine auf die jeweiligen Maßnahmen zugeschnitt
 Für einen Teil der Maßnahmen ist es erforderlich, dass Standortflächen mit einer GIS Software der Excelvorlage zugefügt werden.
 Auf welche Maßnahmen dies zutrifft, und wie Sie je nach Maßnahme vorgehen, erfahren Sie auf den folgenden Seiten.
 
-Zudem finden Sie im Folgendem ein Online Tool zur selbstständigen Überprüfung ihrer Angaben sowie der zugehörigen Standorte.
+Zudem finden Sie im Folgendem ein Online Tool zur selbstständigen Überprüfung ihrer Angaben sowie der zugehörigen Standorte.  
+Darüber hinaus können Sie die geprüften Dateien mittels einer automatisch erzeugten Email direkt weiterleiten.
 Dieser Leitfaden richtet sich an alle, die im Rahmen des Projekts „Natürlicher Klimaschutz in Kommunen“ Standortdaten einreichen.
 
 ### Inhaltübersicht
