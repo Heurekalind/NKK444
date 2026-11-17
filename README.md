@@ -1,7 +1,7 @@
 # NKK444
 Input requirements NKK444 data validator:  
 - The first section is based on the input being Excel templates/merged Geojson in accordance with the FZ Location workflow.
-- The second section contains a more general description of the input requirements and the logic governing how input and validation are to be carried out within the online tool.
+- The second section contains a description of the input requirements and the logic governing how input and validation are to be carried out for direct data input into the online validator tool. (Requested description for innovation week)
 - All referenced error codes are marked bold and can be found in the chapter *Error handling/outputs*
 
 # Part 1. Excel/Geojson upload
