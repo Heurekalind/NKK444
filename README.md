@@ -28,7 +28,7 @@ longitude (float -180 to 180)
 validation_values contains list of excluded_plants for flags in excel
 
 ### 2) NKK444 Polygon Templates 
-### a) NKK444_poly_data_template_pre.xlsx
+#### a) NKK444_poly_data_template_pre.xlsx
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)
@@ -39,7 +39,7 @@ biotope_code_pre = lookup(validation_values, biotope_codes)
 biotope_grade_pre = lookup(validation_values, biotope_codes according to bitope_grade_pre)  
 merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")   
 
-### b) NKK444_poly_data_template_post.xlsx
+#### b) NKK444_poly_data_template_post.xlsx
 nkk_objectnumber(int max 5)   
 grant_numbter (int 0 to 99999999)  
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
@@ -50,7 +50,7 @@ biotope_code_post1 to 6 = lookup(validation_values, biotope_codes)
 biotope_grade_post1 to 6 = lookup(validation_values, biotope_codes according to bitope_grade_post)  
 merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")   
 
-### c) NKK444_poly_data_template_prog.xlsx
+#### c) NKK444_poly_data_template_prog.xlsx
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
@@ -102,7 +102,6 @@ All uploads should be checkt for:
 - report_date (date)
 
 - species
-
 Must match at least one entry in Genus_species_global_tree_search_clean.csv (∃)  
 if FALSE → **Error_a**  
 if TRUE → continue  
@@ -147,7 +146,16 @@ The grades / mean grades need follow
 - merge_id (string, "grant_number"_"intervention_ident"_"start_intervention"_"nkk_objectnumber") 
 Does not identify subareas.
 
-### Error handeling/outputs
+## Outputs/ Generated Email
+nkk_email_template.md
+The generated Email should contain:
+1. Generated/ validated Geojson  
+2a) Validated Excel Template  
+2b) In case of direct input a table of *merge_id* + validated items, either:
+- *species*
+- *area_size, biotope_codes, biotope_grades* including *pre,post,prog* and *subareas*
+
+## Error handeling/outputs
 
 - Error_a) Print the entry and note *" Bitte geben Sie den Gattungs und Artnamen nach den Bestimmungen aus der Dokumentation ein. Achten Sie auch auf Tippfehler."*
 - Error_b) Print the entry and note *"Die Liste nicht förderbarer Gehölze schließt die folgenden Einreichungen aus:* **species ForbiddenMatch**.
