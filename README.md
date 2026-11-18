@@ -168,11 +168,10 @@ File naming convention for attachments:
 - Error_d) Print *"Die Eingereichte Datei entspricht nicht der Vorlage."*
 
 ## To be added 
-- Create a project core schema for the NKK templates presumably based on json_schema_for_humans 
-(german translation to be done by Heurekalind?)
 - PDF Guide for QGIS merge NKK444_qgis_merge_instructions.pdf ( to be done by Heurekalind)
 
 # Visualisations
 
-<img width="365" height="347" alt="image" src="https://github.com/user-attachments/assets/8ddac4cb-0373-4e4b-968b-1204414a71ef" />
+<img width="388" height="356" alt="image" src="https://github.com/user-attachments/assets/bad3c0d7-470c-43db-9960-927ced489ffa" />
+
 
