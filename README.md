@@ -34,12 +34,12 @@ longitude (float -180 to 180)
 validation_values contains list of excluded_plants for flags in excel
 
 ### 2) NKK444 Polygon Templates 
-This template is intended exclusively for the recording of polygon data. 
-I belive it to be preferable for local authorities if direct input were the primary method for submitting polygon data.
-The project area might be subdivided into sub-areas with different biotope classes and codes as the project is implemented.
-For comparison, a weighted average is calculated for the sub-areas in the Excel file.
-To ensure ease of use, only six sub-areas can be entered in the Excel file.
-Depending on user behaviour
+These templates are intended solely for the capture of polygon data.   
+I belive it to be preferable for local authorities if direct input were the primary method for submitting polygon data.  
+Since the project area might be subdivided into sub-areas with different biotope classes and codes as the project is implemented,  
+the manual input of subareas in excel is cumbersome and therefore limited to six subarea entries.  
+For the comparison of biotope grades, a weighted average is calculated for the sub-areas in the Excel file.  
+The administrative documentation of measures requires the submission of three time points, which in turn requires three separate templates.  
 
 #### a) NKK444_poly_data_template_pre.xlsx
 nkk_objectnumber(int max 5)  
