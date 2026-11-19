@@ -1,8 +1,12 @@
 # NKK444
-Input requirements NKK444 data validator:  
+**README Contents and Structure:**
 - The first section is based on the input being Excel templates/merged Geojson in accordance with the FZ Location workflow.
-- The second section contains a description of the input requirements and the logic governing how input and validation are to be carried out for direct data input into the online validator tool. (Requested description for innovation week)
+- The second section contains a description of the input requirements and the logic governing how input and validation are to be carried out for direct data input into the online validator tool. (New validator feature)
 - All referenced error codes are marked bold and can be found in the chapter *Error handling/outputs*
+
+**General notes:**
+- I see a submission based on a database query carried out by local authorities as problematic, as there are differences in biotope type codes and classifications across the various federal states.
+Wherever possible, the submission of biotope type codes that do not comply with "BKompV Anlage 2"  should be avoided.
 
 # Part 1. Excel/Geojson upload
 
@@ -28,6 +32,13 @@ longitude (float -180 to 180)
 validation_values contains list of excluded_plants for flags in excel
 
 ### 2) NKK444 Polygon Templates 
+This template is intended exclusively for the recording of polygon data. 
+I belive it to be preferable for local authorities if direct input were the primary method for submitting polygon data.
+The project area might be subdivided into sub-areas with different biotope classes and codes as the project is implemented.
+For comparison, a weighted average is calculated for the sub-areas in the Excel file.
+To ensure ease of use, only six sub-areas can be entered in the Excel file.
+Depending on user behaviour
+
 #### a) NKK444_poly_data_template_pre.xlsx
 nkk_objectnumber(int max 5)  
 grant_numbter (int 0 to 99999999)  
@@ -68,6 +79,7 @@ validation_values contains bitope_codes and biotope_grades
 
 ### General 
 Can be closely based on the FZ Locations.
+Note: not all subarea columns have to be filled in.
 All uploads should be checkt for:
 - correct number of cols **Error_d)**
 - correct col names (nothing added, changed or removed) **Error_d)**
@@ -80,9 +92,13 @@ All uploads should be checkt for:
 - Check valid long lat columns
   
 ### 2) NKK444_poly_data_template.xlsx
-- Three files must be submitted
+- Three files must be submitted one for each date.
 - Number of actual geometries must match the number_subareas column within each file.
   	- Only File two and three contain subareas.
+- The number of subareas 1 to 6 as well as biotope_code 1 to 6 need to match the entry in number_subareas  
+- The grades / mean grades need follow  
+	- grade_pre < mean_grade_post  
+	- mean_grade_post < mean_grade_prog  
 
 # Part 2. Direct input
 
@@ -93,6 +109,7 @@ All uploads should be checkt for:
 - The data should be sent via automated draft email to the administrator,
   as they need to carry out additional checks before the data can be provided to the BfN (via ODP?)
 - All the inputs listed are compulsory
+- All frontend inputdescriptions and column names should be in german and in accordance with the excel template
 
 ## Point Data Inputs and logic - Direct Input 
 
