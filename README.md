@@ -127,9 +127,9 @@ Must match at least one entry in Genus_species_global_tree_search_clean.csv (∃
 if FALSE → **Error_a**  
 if TRUE → continue
 
-If intervention_ident == B2;B3EB then ensure species must not match any entry in excluded_plants.csv (∄)
+If intervention_ident == B2;B3EB then ensure species must not match any entry in excluded_plants.csv (∄)  
 if TRUE  → **Error_b** (ForbiddenMatch)  
-if FALSE
+if FALSE  → pass
 (if intervention_ident == B4 → pass)
 
 - diameter (int 1 to 999)  
@@ -186,7 +186,7 @@ File naming convention for attachments:
 ## Error handeling/outputs
 
 - Error_a) Print the entry and note *" Bitte geben Sie den Gattungs und Artnamen nach den Bestimmungen aus der Dokumentation ein. Achten Sie auch auf Tippfehler."*
-- Error_b) Print the entry and note *"Die Liste nicht förderbarer Gehölze schließt die folgenden Einreichungen aus:* **species ForbiddenMatch**.
+- Error_b) Print the entry and note *"Die Liste nicht förderbarer Gehölze schließt die folgenden Einreichungen für die Maßnahmen B2 und B3EB aus:* **species ForbiddenMatch**.
   *Bitte entfernen Sie diese aus dem Template und reichen nur förderbare Gehölze ein."*
 - Error_c) Print colname and row *"Bitte prüfen Sie Ihre Eingabe entsprechend der Eingabebestimmungen"*
 - Error_d) Print *"Die Eingereichte Datei entspricht nicht der Vorlage."*
