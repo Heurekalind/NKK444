@@ -7,6 +7,8 @@
 **General notes:**
 - I see a submission based on a database query carried out by local authorities as problematic, as there are differences in biotope type codes and classifications across the various federal states.
 Wherever possible, the submission of biotope type codes that do not comply with "BKompV Anlage 2"  should be avoided.
+- The BfN requests ETRS89 / UTM Zone 32N (EPSG: 25832)
+The MD files containing the user information are currently based solely on the Excel upload. I would like to take a look at the new validation tool first before adding or amending the descriptions accordingly.
 
 # Part 1. Excel/Geojson upload
 
