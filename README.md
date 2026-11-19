@@ -8,7 +8,8 @@
 - I see a submission based on a database query carried out by local authorities as problematic, as there are differences in biotope type codes and classifications across the various federal states.
 Wherever possible, the submission of biotope type codes that do not comply with "BKompV Anlage 2"  should be avoided.
 - The BfN requests ETRS89 / UTM Zone 32N (EPSG: 25832)
-The MD files containing the user information are currently based solely on the Excel upload. I would like to take a look at the new validation tool first before adding or amending the descriptions accordingly.
+The MD files containing the user information are currently based solely on the Excel upload.  
+- I would like to take a look at the new validation tool first before adding or amending the descriptions accordingly.  
 
 # Part 1. Excel/Geojson upload
 
@@ -36,8 +37,9 @@ validation_values contains list of excluded_plants for flags in excel
 ### 2) NKK444 Polygon Templates 
 These templates are intended solely for the capture of polygon data.   
 I belive it to be preferable for local authorities if direct input were the primary method for submitting polygon data.  
-Since the project area might be subdivided into sub-areas with different biotope classes and codes as the project is implemented,  
-the manual input of subareas in excel is cumbersome and therefore limited to six subarea entries.  
+The project area might be subdivided into sub-areas with different biotope codes and grades as the project is implemented.
+A merging of multiple subareas with different codes and grades is also possible.
+As the manual input of subareas in excel is cumbersome and it is now limited to six subarea entries.  
 For the comparison of biotope grades, a weighted average is calculated for the sub-areas in the Excel file.  
 The administrative documentation of measures requires the submission of three time points, which in turn requires three separate templates.  
 
@@ -81,7 +83,7 @@ validation_values contains bitope_codes and biotope_grades
 
 ### General 
 Can be closely based on the FZ Locations.
-Note: not all subarea columns have to be filled in.
+Note: **not all** subarea columns have to be filled in.
 All uploads should be checkt for:
 - correct number of cols **Error_d)**
 - correct col names (nothing added, changed or removed) **Error_d)**
@@ -90,13 +92,13 @@ All uploads should be checkt for:
 ### 1) NKK444_point_data_template.xlsx
 
 - The Genus_species_global_tree_search_clean.csv provides allowed entries for the *species* column
-- The excluded_plants.csv contains species that are not eligible for a grant.
+- The excluded_plants.csv contains species that are not eligible for a grant for the intervention_ident == B2;B3EB
+	- A flag within the email if intervention_ident == B4 is on the list of excluded_plants.csv would be helpful if possible
 - Check valid long lat columns
   
 ### 2) NKK444_poly_data_template.xlsx
 - Three files must be submitted one for each date.
 - Number of actual geometries must match the number_subareas column within each file.
-  	- Only File two and three contain subareas.
 - The number of subareas 1 to 6 as well as biotope_code 1 to 6 need to match the entry in number_subareas  
 - The grades / mean grades need follow  
 	- grade_pre < mean_grade_post  
@@ -111,7 +113,7 @@ All uploads should be checkt for:
 - The data should be sent via automated draft email to the administrator,
   as they need to carry out additional checks before the data can be provided to the BfN (via ODP?)
 - All the inputs listed are compulsory
-- All frontend inputdescriptions and column names should be in german and in accordance with the excel template
+- All frontend inputdescriptions and column names should be in german and in accordance with the excel templates
 
 ## Point Data Inputs and logic - Direct Input 
 
@@ -123,10 +125,12 @@ All uploads should be checkt for:
 - species
 Must match at least one entry in Genus_species_global_tree_search_clean.csv (∃)  
 if FALSE → **Error_a**  
-if TRUE → continue  
-Then ensure species must not match any entry in excluded_plants.csv (∄)  
+if TRUE → continue
+
+If intervention_ident == B2;B3EB then ensure species must not match any entry in excluded_plants.csv (∄)
 if TRUE  → **Error_b** (ForbiddenMatch)  
-if FALSE  → pass   
+if FALSE
+(if intervention_ident == B4 → pass)
 
 - diameter (int 1 to 999)  
 - planting_year (int 1900 to 2999) 
@@ -155,10 +159,10 @@ Area _size_pre can split during intervention into x sub-areas
 - biotope_code (for each area/subareas)
 - biotope_grade = lookup(biotope_codes.csv)
 
-In case the original area splits during intervention the weighted mean of the biotope grades, for the subareas is to be calculated.  
+In case the original area splits or merges during intervention the weighted mean of the biotope grades, for the subareas is to be calculated.  
 grade_mean = sum(grade_i * subarea_i) / sum(subarea_i) 
 
-The grades / mean grades need follow 
+The grades / mean grades need to follow 
 - grade_pre < mean_grade_post
 - mean_grade_post < mean_grade_prog
 
@@ -171,9 +175,10 @@ The generated Email should contain:
 1. Email Text *nkk_email_template.md*
 2. Generated/ validated Geojson  
 3a) Validated Excel Template  
-3b) In case of direct input a table of *merge_id* + validated items, either:
-- *species*
-- *area_size, biotope_codes, biotope_grades* including *pre,post,prog* and *subareas*
+3b) In case of direct input a table of *merge_id* +
+- (if possible) validated items, either:
+	- *species*
+	- *area_size, biotope_codes, biotope_grades* including *pre,post,prog* and *subareas*
   
 File naming convention for attachments:  
 "grant_number"_"intervention_ident"_"start_intervention"_"date".extension
