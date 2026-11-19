@@ -2,4 +2,6 @@
 
 [Punkreferenziert](_/NKK444_point_data_template.xlsx)
 
-[Flächen- und Linienreferenziert](_/NKK444_poly_data_template.xlsx)
+[Flächen- und Linienreferenziert vor Maßnahmenumsetzung](_/NKK444_poly_data_template_pre.xlsx)
+[Flächen- und Linienreferenziert nach Maßnahmenumsetzung](_/NKK444_poly_data_template_post.xlsx)
+[Flächen- und Linienreferenziert zum Prognosezeitpunkt](_/NKK444_poly_data_template_prog.xlsx)
