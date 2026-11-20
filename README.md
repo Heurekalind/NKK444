@@ -48,11 +48,11 @@ grant_number (int 0 to 99999999)
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
 start_intervention (int 2017 to 2070)  
 report_date_pre (date)  
-area_size_pre1 to 6 ( int 1 to 99999999999999)  
+area_size_pre1 to 6 ( int 1 to 99999999999999)    
 biotope_code_pre1 to 6 = lookup(validation_values, biotope_codes)  
-biotope_grade_pre1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_pre)  
-mean_calculation
-mean_grade_pre ( rounded, weighted mean biotope grades for comaprison)
+biotope_grade_pre1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_pre)    
+mean_calculation  
+mean_grade_pre ( rounded, weighted mean biotope grades for comaprison)  
 merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")   
 
 #### b) NKK444_poly_data_template_post.xlsx
@@ -63,9 +63,9 @@ start_intervention (int 2017 to 2070)
 report_date_post (date)  
 area_size_post1 to 6 ( int 1 to 99999999999999)  
 biotope_code_post1 to 6 = lookup(validation_values, biotope_codes)  
-biotope_grade_post1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_post)
-mean_calculation
-mean_grade_post ( rounded, weighted mean biotope grades for comaprison)
+biotope_grade_post1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_post)  
+mean_calculation  
+mean_grade_post ( rounded, weighted mean biotope grades for comaprison)  
 merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")   
 
 #### c) NKK444_poly_data_template_prog.xlsx
@@ -76,10 +76,10 @@ start_intervention (int 2017 to 2070)
 report_date_prog (date, autofill 2045-12-31)  
 area_size_prog1 to 6 ( int 1 to 99999999999999)  
 biotope_code_prog1 to 6 = lookup(validation_values, biotope_codes)  
-biotope_grade_prog1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_prog)
-mean_calculation
-mean_grade_prog ( rounded, weighted mean biotope grades for comaprison)
-merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")    
+biotope_grade_prog1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_prog)  
+mean_calculation   
+mean_grade_prog ( rounded, weighted mean biotope grades for comaprison)   
+merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")      
 
 **Second sheet**
 validation_values contains biotope_codes and biotope_grades
