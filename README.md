@@ -6,10 +6,9 @@
 
 **General notes:**
 - I see a submission based on a database query carried out by local authorities as problematic, as there are differences in biotope type codes and classifications across the various federal states.
-Wherever possible, the submission of biotope type codes that do not comply with "BKompV Anlage 2"  should be avoided.
-- The BfN requests ETRS89 / UTM Zone 32N (EPSG: 25832)
-The MD files containing the user information are currently based solely on the Excel upload.  
-- I would like to take a look at the new validation tool first before adding or amending the descriptions accordingly.  
+Wherever possible, the submission of biotope type codes that do not comply with "BKompV Anlage 2"  should be avoided.  
+- The BfN requests ETRS89 / UTM Zone 32N (EPSG: 25832)  
+- The MD files containing the user information are currently based solely on the Excel upload and not up to date. I would like to take a look at the new validation tool first before adding or amending the descriptions accordingly.  
 
 # Part 1. Excel/Geojson upload
 
@@ -20,8 +19,8 @@ The machine-readable column names are hidden in row six; row seven contains desc
 This template is intended solely for recording point data, most of which is entered manually by users.
 
 cols:
-nkk_objectnumber(int max 5)  
-grant_numbter (int 0 to 99999999)  
+nkk_objectnumber(int max 5, leading 0s)  
+grant_number (int 0 to 99999999)  
 intervention_ident (B2;B3EB;B4)  
 report_date (date)  
 species (any value, excel obtains color flag in case exact equal to validation_value, excluded_plants)  
@@ -44,40 +43,46 @@ For the comparison of biotope grades, a weighted average is calculated for the s
 The administrative documentation of measures requires the submission of three time points, which in turn requires three separate templates.  
 
 #### a) NKK444_poly_data_template_pre.xlsx
-nkk_objectnumber(int max 5)  
-grant_numbter (int 0 to 99999999)  
-intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)
+nkk_objectnumber(int max 5, leading 0s)   
+grant_number (int 0 to 99999999)  
+intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
 start_intervention (int 2017 to 2070)  
 report_date_pre (date)  
-area_size ( int 1 to 99999999999999)  
-biotope_code_pre = lookup(validation_values, biotope_codes)  
-biotope_grade_pre = lookup(validation_values, biotope_codes according to bitope_grade_pre)  
+area_size_pre1 to 6 ( int 1 to 99999999999999)  
+biotope_code_pre1 to 6 = lookup(validation_values, biotope_codes)  
+biotope_grade_pre1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_pre)  
+mean_calculation
+mean_grade_pre ( rounded, weighted mean biotope grades for comaprison)
 merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")   
 
 #### b) NKK444_poly_data_template_post.xlsx
-nkk_objectnumber(int max 5)   
-grant_numbter (int 0 to 99999999)  
+nkk_objectnumber(int max 5, leading 0s)   
+grant_number (int 0 to 99999999)  
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
 start_intervention (int 2017 to 2070)  
 report_date_post (date)  
 area_size_post1 to 6 ( int 1 to 99999999999999)  
 biotope_code_post1 to 6 = lookup(validation_values, biotope_codes)  
-biotope_grade_post1 to 6 = lookup(validation_values, biotope_codes according to bitope_grade_post)  
+biotope_grade_post1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_post)
+mean_calculation
+mean_grade_post ( rounded, weighted mean biotope grades for comaprison)
 merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")   
 
 #### c) NKK444_poly_data_template_prog.xlsx
-nkk_objectnumber(int max 5)  
-grant_numbter (int 0 to 99999999)  
+nkk_objectnumber(int max 5, leading 0s)  
+grant_number (int 0 to 99999999)  
 intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)  
 start_intervention (int 2017 to 2070)  
-report_date_prog (date)  
+report_date_prog (date, autofill 2045-12-31)  
 area_size_prog1 to 6 ( int 1 to 99999999999999)  
 biotope_code_prog1 to 6 = lookup(validation_values, biotope_codes)  
-biotope_grade_prog1 to 6 = lookup(validation_values, biotope_codes according to bitope_grade_prog)  
+biotope_grade_prog1 to 6 = lookup(validation_values, biotope_grades according to biotope_code_prog)
+mean_calculation
+mean_grade_prog ( rounded, weighted mean biotope grades for comaprison)
 merge_id (string, "grant_number"_ "intervention_ident" _ "start_intervention"_ "nkk_objectnumber")    
 
 **Second sheet**
-validation_values contains bitope_codes and biotope_grades
+validation_values contains biotope_codes and biotope_grades
 
 ## Validator verification 
 
@@ -94,15 +99,16 @@ All uploads should be checkt for:
 - The Genus_species_global_tree_search_clean.csv provides allowed entries for the *species* column
 - The excluded_plants.csv contains species that are not eligible for a grant for the intervention_ident == B2;B3EB
 	- A flag within the email if intervention_ident == B4 is on the list of excluded_plants.csv would be helpful if possible
-- Check valid long lat columns
+- Check valid long lat columns, display on map
   
-### 2) NKK444_poly_data_template.xlsx
+### 2) NKK444_poly_data_templates
 - Three files must be submitted one for each date.
 - Number of actual geometries must match the number_subareas column within each file.
 - The number of subareas 1 to 6 as well as biotope_code 1 to 6 need to match the entry in number_subareas  
 - The grades / mean grades need follow  
 	- grade_pre < mean_grade_post  
-	- mean_grade_post < mean_grade_prog  
+	- mean_grade_post < mean_grade_prog
+ - Display polygons on map for visual verification 
 
 # Part 2. Direct input
 
@@ -117,10 +123,11 @@ All uploads should be checkt for:
 
 ## Point Data Inputs and logic - Direct Input 
 
-- nkk_objectnumber(int max 5)  
-- grant_numbter (int 0 to 99999999)  
+- nkk_objectnumber(int max 5, leading 0s)  
+- grant_number (int 0 to 99999999)  
 - intervention_ident (B2;B3EB;B4) 
 - report_date (date)
+- start_intervention (year of intervention start forms part of the merge_id)
 
 - species
 Must match at least one entry in Genus_species_global_tree_search_clean.csv (∃)  
@@ -141,20 +148,19 @@ if FALSE  → pass
 ## Polydata Inputs and logic - Direct Input 
 - nkk_objectnumber(string max 5 with leading 0s)  
 - grant_number (int 0 to 99999999)  
-- intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2) 
+- intervention_ident (A3;B3H;C1;C2;C;C4;C5;D2)
+- start_intervention (year of intervention start forms part of the merge_id)
 
 - report_date_pre (date)
 - report_date_post (date)
-- report_date_prog (date, autofill always 2045)
+- report_date_prog (date, autofill 2045-12-31)
 
 Area/s in sqm
-Area _size_pre can split during intervention into x sub-areas
+Area _size_pre can split or merge during intervention into/ or from x sub-areas
 - area_size_pre ( int 1 to 99999999999999) 
-	sum(sub_area_size_pre) == area_size_pre
 - area_size_post ( int 1 to 99999999999999)
-	sum(sub_area_size_post) == area_size_pre
 - area_size_prog ( int 1 to 99999999999999)
-	sum(sub_area_size_prog) == area_size_pre
+
 
 - biotope_code (for each area/subareas)
 - biotope_grade = lookup(biotope_codes.csv)
@@ -191,8 +197,10 @@ File naming convention for attachments:
 - Error_c) Print colname and row *"Bitte prüfen Sie Ihre Eingabe entsprechend der Eingabebestimmungen"*
 - Error_d) Print *"Die Eingereichte Datei entspricht nicht der Vorlage."*
 
-## To be added 
-- PDF Guide for QGIS merge NKK444_qgis_merge_instructions.pdf ( to be done by Heurekalind)
+## To be added/ amended 
+( to be done by Heurekalind)
+- PDF Guide for QGIS merge NKK444_qgis_merge_instructions.pdf
+- Descriptive md files
 
 # Visualisations
 
