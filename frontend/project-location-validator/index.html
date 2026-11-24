@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natürlicher Klimaschutz in Kommunen – Standortdaten</title>
+  </head>
+  <body>
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">KfW-Förderprogramm 444 · Standortdaten</p>
+        <h1>Natürlicher Klimaschutz in Kommunen</h1>
+        <p>Maßnahmen auf der Karte erfassen, fachlich prüfen und zur Einreichung vorbereiten.</p>
+        <nav class="site-nav"><a href="../index.html">Anwendungsfälle</a><a href="../dokumentation.html">Dokumentation</a></nav>
+      </div>
+    </header>
+    <main>
+      <div id="startup" role="alert" hidden></div>
+      <details id="import-panel" class="panel">
+        <summary>Dateien laden</summary>
+        <div id="import-form"></div>
+      </details>
+      <div class="workspace">
+        <section class="panel attribute-panel" aria-labelledby="table-title">
+          <h2 id="table-title">Attributtabelle</h2>
+          <p>Änderungen werden sofort geprüft. Wählen Sie einen Standort in der Tabelle oder auf der Karte aus.</p>
+          <div id="table-filters"></div>
+          <div id="table-scroll" class="table-scroll" role="region" aria-label="Bearbeitbare Standortdaten" tabindex="0"></div>
+          <div id="selection-actions" class="button-row"></div>
+        </section>
+        <section class="panel map-panel" aria-labelledby="map-title">
+          <div class="map-header">
+            <h2 id="map-title">Karte</h2>
+            <div class="map-actions">
+              <button id="fit" type="button">Alle Standorte zeigen</button>
+            </div>
+          </div>
+          <form id="search" class="search" role="search">
+            <label for="place-query">Ort, Straße oder Postleitzahl</label>
+            <div><input id="place-query" type="search" placeholder="z. B. 60311 Frankfurt" required minlength="2"><button type="submit">Suchen</button></div>
+            <small>Externe Suche mit Daten von <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>. Keine vertraulichen Suchtexte eingeben.</small>
+          </form>
+          <div id="search-results" aria-live="polite"></div>
+          <div class="button-row map-tools" aria-label="Standort zeichnen">
+            <button type="button" data-draw="Point">Punkt zeichnen</button>
+            <button type="button" data-draw="LineString">Linie zeichnen</button>
+            <button type="button" data-draw="Polygon">Fläche zeichnen</button>
+          </div>
+          <div id="drawing" class="drawing" aria-live="polite" hidden>
+            <span id="drawing-hint"></span>
+            <button type="button" id="finish-drawing">Zeichnung übernehmen</button>
+            <button type="button" id="cancel-drawing">Abbrechen</button>
+          </div>
+          <div id="map" aria-label="Karte der Maßnahmenstandorte"></div>
+          <div class="map-footer">
+            <label><input id="tiles" type="checkbox"> OpenStreetMap-Hintergrund anzeigen</label>
+            <small>Beim Aktivieren wird der Kartenausschnitt an OpenStreetMap übertragen. Standortdateien bleiben im Browser.</small>
+          </div>
+        </section>
+      </div>
+      <dialog id="attribute-dialog" aria-labelledby="dialog-title"></dialog>
+      <section id="results" class="panel" aria-labelledby="results-title">
+        <h2 id="results-title" tabindex="-1">Prüfergebnis</h2>
+        <p id="result-summary" role="status"></p>
+        <ul id="issues"></ul>
+        <fieldset id="downloads" class="button-row" disabled>
+          <legend>Speichern und exportieren</legend>
+          <label><input type="checkbox" id="zip-geojson" checked> GeoJSON (WGS84)</label>
+          <label><input type="checkbox" id="zip-excel" checked> Excel</label>
+          <button class="primary" type="button" data-export="zip">ZIP herunterladen</button>
+          <button type="button" data-export="xlsx">Excel (.xlsx)</button>
+          <button type="button" data-export="wgs84">GeoJSON (WGS84)</button>
+          <button type="button" data-export="utm">GeoJSON (EPSG:25832)</button>
+          <button type="button" data-export="csv">Prüftabelle (CSV)</button>
+          <button type="button" data-export="email">E-Mail-Entwurf (.eml)</button>
+        </fieldset>
+        <p id="export-message" role="status"></p>
+      </section>
+      <footer>Die automatische Prüfung ersetzt nicht die fachliche Plausibilitätsprüfung vor der Einreichung.</footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

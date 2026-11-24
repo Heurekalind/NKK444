@@ -33,4 +33,4 @@ Enthält die Excel Vorlagen zur Maßnahmendokumentation die im Datenvalidator ge
 
 ### Anhang 2   
 Enthält eine detaillierte Beschreibungen aller Felder aus dem Datenmodell, die automatisch aus dem JSON-Schema extrahiert wurden.   
-- [Projekt-Kernschema](schemas/project_core_schema_nkk.md)
+- [Projekt-Kernschema und Validierungsregeln](./project_core_schema_nkk.md)

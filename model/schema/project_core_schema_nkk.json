@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "project_core_schema_nkk.json",
+  "title": "Natürlicher Klimaschutz in Kommunen – Projekt-Kernschema",
+  "oneOf": [
+    { "$ref": "#/definitions/point" },
+    { "$ref": "#/definitions/area" }
+  ],
+  "definitions": {
+    "nkk_objectnumber": { "title": "Objektnummer", "type": "string", "pattern": "^[0-9]{5}$", "description": "Fünf Stellen, einschließlich führender Nullen." },
+    "grant_number": { "title": "Zuschussnummer", "type": "integer", "minimum": 0, "maximum": 99999999 },
+    "merge_id": { "title": "Flächenbezeichner", "type": "string", "pattern": "^[0-9]{1,8}_(B2|B3EB|B4|A3|B3H|C1|C2|C|C4|C5|D2)_[0-9]{4}_[0-9]{5}$" },
+    "report_date": { "title": "Berichtszeitpunkt", "type": "string", "format": "date" },
+    "point": {
+      "title": "Punktreferenzierte Maßnahme",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nkk_objectnumber", "grant_number", "intervention_ident", "start_intervention", "merge_id", "report_date", "species", "diameter", "planting_year", "plant_age"],
+      "properties": {
+        "nkk_objectnumber": { "$ref": "#/definitions/nkk_objectnumber" },
+        "grant_number": { "$ref": "#/definitions/grant_number" },
+        "intervention_ident": { "title": "Maßnahmenkürzel", "enum": ["B2", "B3EB", "B4"] },
+        "start_intervention": { "title": "Jahr Maßnahmenbeginn", "type": "integer", "minimum": 2015, "maximum": 2070 },
+        "merge_id": { "$ref": "#/definitions/merge_id" },
+        "report_date": { "$ref": "#/definitions/report_date" },
+        "species": { "title": "Gattungs- und Artname", "type": "string", "minLength": 1 },
+        "diameter": { "title": "Brusthöhendurchmesser (cm)", "type": "integer", "minimum": 1, "maximum": 999 },
+        "planting_year": { "title": "Pflanzjahr", "type": "integer", "minimum": 1900, "maximum": 2999 },
+        "plant_age": { "title": "Pflanzalter (Jahre)", "type": "integer", "minimum": 0, "maximum": 50 }
+      }
+    },
+    "area": {
+      "title": "Flächen- oder linienreferenzierte Teilfläche zu einem Berichtszeitpunkt",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nkk_objectnumber", "grant_number", "intervention_ident", "start_intervention", "merge_id", "phase", "report_date", "subarea_number", "area_size", "biotope_code", "biotope_grade"],
+      "properties": {
+        "nkk_objectnumber": { "$ref": "#/definitions/nkk_objectnumber" },
+        "grant_number": { "$ref": "#/definitions/grant_number" },
+        "intervention_ident": { "title": "Maßnahmenkürzel", "enum": ["A3", "B3H", "C1", "C2", "C", "C4", "C5", "D2"], "description": "C entspricht Maßnahme C.3 in den Excel-Vorlagen." },
+        "start_intervention": { "title": "Jahr Maßnahmenbeginn", "type": "integer", "minimum": 2017, "maximum": 2070 },
+        "merge_id": { "$ref": "#/definitions/merge_id" },
+        "phase": { "title": "Berichtsphase", "enum": ["pre", "post", "prog"] },
+        "report_date": { "$ref": "#/definitions/report_date" },
+        "subarea_number": { "title": "Teilflächennummer", "type": "integer", "minimum": 1 },
+        "area_size": { "title": "Flächengröße (m²)", "type": "integer", "minimum": 1, "maximum": 99999999999999 },
+        "biotope_code": { "title": "Biotoptyp-Code", "type": "string", "minLength": 1 },
+        "biotope_grade": { "title": "Biotopwert", "type": "integer", "minimum": 0, "maximum": 24 }
+      }
+    }
+  }
+}

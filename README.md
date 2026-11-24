@@ -1,4 +1,27 @@
-# NKK444
+# Natürlicher Klimaschutz in Kommunen (NKK444)
+
+Der deutschsprachige Standortvalidator verbindet die Leaflet-Karte mit einer bearbeitbaren Attributtabelle. Er prüft die Angaben direkt bei Änderungen, unterstützt gemischte Geometrien und bietet standardmäßig ein ZIP mit GeoJSON und erneut importierbarer Excel-Arbeitsmappe. Das bestehende FZ-Tool und seine Dokumentation sind auf der Startseite verlinkt.
+
+### Lokal starten
+
+```sh
+cd frontend
+npm ci
+npm run dev
+```
+
+Die im Terminal ausgegebene Adresse im Browser öffnen. `npm test` prüft Schema, Import und Excel-Rundlauf; `npm run build` schreibt die gesamte statische Website nach `frontend/dist`: Startseite (`index.html`), Standorttool (`project-location-validator/index.html`) und die aus Markdown gerenderte Dokumentation (`dokumentation.html`). Für GitHub Pages „GitHub Actions“ als Quelle wählen. Der [Pages-Workflow](./.github/workflows/pages.yml) baut und veröffentlicht bei Push auf `main` oder bei manuellem Start. Dateiimport, Bearbeitung und Validierung benötigen kein Backend.
+
+- [Datenmodell und Unterschiede zu den Vorlagen](./project_core_schema_nkk.md)
+- [Datenerhebung](./collection_nkk.md)
+- [Excel-Vorlagen](./annex1_nkk.md)
+
+Die folgenden Abschnitte halten die ursprünglichen fachlichen Anforderungen fest. Bei abweichenden Spaltennamen oder Formaten gilt die oben verlinkte Beschreibung des implementierten Modells.
+
+Für eine öffentliche Bereitstellung vorab die Nutzungsbedingungen des [Kartenhintergrunds](https://operations.osmfoundation.org/policies/tiles/) und der [Ortssuche](https://operations.osmfoundation.org/policies/nominatim/) prüfen. `VITE_GEOCODER_URL` erlaubt beim Build einen anderen Nominatim-kompatiblen Suchendpunkt. Der OpenStreetMap-Hintergrund ist erst nach Aktivierung sichtbar.
+
+## Fachliche Anforderungen
+
 **README Contents and Structure:**
 - The first section is based on the input being Excel templates/merged Geojson in accordance with the FZ Location workflow.
 - The second section contains a description of the input requirements and the logic governing how input and validation are to be carried out for direct data input into the online validator tool. (New validator feature)

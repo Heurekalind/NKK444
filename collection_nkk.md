@@ -1,7 +1,9 @@
 # Leitfaden zur Datenerhebung
 
 ## Allgemein
-Alle Georeferenzen müssen in **ETRS89 / UTM Zone 32N  (EPSG: 25832)** Koordinatenreferenzsystem (CRS) erfasst werden, Standorte, die in einem **abweichenden CRS** erfasst werden, können den **falschen Standort** abbilden.
+Für die Einreichung wird **ETRS89 / UTM Zone 32N (EPSG:25832)** verwendet. Die Karte und das standardkonforme GeoJSON verwenden WGS84. Der Validator kann zwischen beiden umrechnen. Exportieren Sie für die Einreichung ausdrücklich die Datei in EPSG:25832.
+
+Im [Standortvalidator](./validation_nkk.md) können Sie die Standorte ohne separate GIS-Software erfassen. Zeichnen Sie einen Punkt, eine Linie oder eine Fläche und füllen Sie anschließend das Attributformular aus. Für mehrere Geometriebestandteile einer Teilfläche wählen Sie deren Zeile aus und verwenden „Linie hinzufügen“ oder „Fläche hinzufügen“.
 
 ## Punktreferenzierte Maßnahmen
 Folgende Maßnahmen können als Punktreferenz angegeben werden:
@@ -12,7 +14,7 @@ Folgende Maßnahmen können als Punktreferenz angegeben werden:
 >Bitte beachten Sie bei der Angabe "Baumart", unbedingt die durch die ["Liste nicht förderfähiger Gehölze"](https://www.kfw.de/PDF/Download-Center/F%C3%B6rderprogramme-(Inlandsf%C3%B6rderung)/PDF-Dokumente/6000005113_M_444_Anhang_1_Mindestanforderungen.pdf) ausgeschlossenen Arten!  
 >Zudem müssen der Gattungs- und Artname der wissenschaftlichen Standartschreibweise entsprechen. Die Gattung wird groß, die Art klein geschrieben.
 
-Die Koordinaten (Spalten „Breitengrad“ und „Längengrad“) in der Excelvorlage müssen im Dezimalformat mit einer Genauigkeit von mindestens 5 Stellen nach dem Trennzeichen angegeben werden (d. h. 00,00000).  
+Die Koordinaten (Spalten „Breitengrad“ und „Längengrad“) in der Excelvorlage werden als WGS84-Dezimalgrad mit mindestens fünf Nachkommastellen erfasst (z. B. `52,50178`). Den Berichtszeitpunkt geben Sie beim Prüfen der Datei für alle Zeilen gemeinsam an.
 Für die Erfassung von Punktstandorten können derzeit die Datenformate XLSX und GeoJSON eingereicht werden.
 
 
@@ -31,7 +33,6 @@ Folgende Maßnahmen können als Flächen- und/ oder Linienreferenzierte angegebe
 >Angaben zu "Biotoptyp Code" entnehmen Sie bitte der[ *"Bundeskompensationsverordnung - BKompV, Anlage 2 (zu § 5 Absatz 1) Liste der Biotoptypen und -werte"*](https://www.gesetze-im-internet.de/bkompv/anlage_2.html).  
 >Biotoptypencodes und -werte können je nach Quelle variieren daher **nehmen Sie unbedingt Bezug auf die bereitgestellte Anlage 2.**
 
-Für die Erfassung von Linien- oder Polygonstandorten wird ausschließlich das GeoJSON-Formats akzeptiert.
-Um das Format einzuhalten, wird empfohlen die Excel-Vorlage zur Erfassung der Maßnahmenbezogenen Daten zu verwenden und diese dann mit einer GIS Software mit den Objektflächen/ Linien zusammen zu führen.  
+Linien und Flächen können als NKK444-GeoJSON oder NKK444-Standortarbeitsmappe gespeichert und erneut geladen werden. Für den bestehenden GIS-Workflow können Sie die phasenbezogenen Excel-Vorlagen mit Objektflächen oder Linien zusammenführen und je Phase eine GeoJSON-Datei laden.
 Eine Basis Anleitung wie eine Zusammenführung in Q-GIS geschehen kann finden Sie [hier] (/NKK444_qgis_merge_instructions.pdf).
 
