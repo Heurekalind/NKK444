@@ -26,7 +26,7 @@ export type AreaProperties = Common & {
 };
 export type Feature = { type: "Feature"; id?: string | number; geometry: Geometry; properties: PointProperties | AreaProperties };
 export type Collection = { type: "FeatureCollection"; features: Feature[] };
-export type Issue = { code: string; source: string; message: string; warning?: boolean; row?: string; field?: string };
+export type Issue = { code: string; source: string; message: string; warning?: boolean; row?: string; field?: string; incompletePhases?: boolean };
 export type Candidate = { data: unknown; source: string; row?: string };
 
 export const phases = ["pre", "post", "prog"] as const;
@@ -158,18 +158,42 @@ export function weightedGrade(parts: AreaProperties[]) {
   return { weighted, total, mean: Number(weighted) / Number(total) };
 }
 
-export function validate(candidates: Candidate[], catalogs: Catalogs): { features: Feature[]; issues: Issue[] } {
+function catalogIssues(data: unknown, catalogs: Catalogs, add: (code: string, message: string, warning: boolean, field: string) => void) {
+  if (!isRecord(data) || !isRecord(data.geometry) || !isRecord(data.properties)) return;
+  const p = data.properties;
+  if (data.geometry.type === "Point") {
+    if (typeof p.species !== "string" || !p.species.trim()) return;
+    if (!catalogs.species.has(p.species)) {
+      add("Error_a", `„${p.species}“ steht nicht in der Artenliste. Prüfen Sie die wissenschaftliche Schreibweise und wählen Sie den passenden Vorschlag.`, false, "species");
+    }
+    if (catalogs.excluded.has(p.species.toLowerCase())) {
+      const measure = p.intervention_ident;
+      if (measure === "B4") add("Hinweis", `„${p.species}“ steht auf der Liste nicht förderfähiger Gehölze; für B.4 ist dies nur ein Hinweis.`, true, "species");
+      if (measure === "B2" || measure === "B3EB") add("Error_b", `„${p.species}“ ist für B.2 und B.3EB nicht förderfähig. Erfassen Sie hier nur förderfähige Gehölze.`, false, "species");
+    }
+  } else if (typeof p.biotope_code === "string" && p.biotope_code.trim()) {
+    const grades = catalogs.biotopes.get(p.biotope_code);
+    if (!grades) add("Error_c", `Biotoptyp-Code „${p.biotope_code}“ ist nicht in der Referenzliste enthalten.`, false, "biotope_code");
+    else if (typeof p.biotope_grade === "number" && Number.isInteger(p.biotope_grade)) {
+      if (!grades.includes(p.biotope_grade)) add("Error_c", `Biotopwert für „${p.biotope_code}“: zulässige Werte sind ${grades.join(", ")}.`, false, "biotope_grade");
+      else if (grades.length > 1) add("Hinweis", `Für „${p.biotope_code}“ sind mehrere Biotopwerte hinterlegt (${grades.join(", ")}). Bitte prüfen Sie den gewählten Wert ${p.biotope_grade}.`, true, "biotope_grade");
+    }
+  }
+}
+
+export function validate(candidates: Candidate[], catalogs: Catalogs, { allowIncompletePhases = false } = {}): { features: Feature[]; issues: Issue[] } {
   const issues: Issue[] = [];
   const features: Feature[] = [];
   type Report = { date: string; parts: AreaProperties[]; numbers: Set<number> };
   const points = new Set<string>();
   const areas = new Map<string, { reports: Map<Phase, Report>; rows: Candidate[] }>();
-  const add = (code: string, candidate: Pick<Candidate, "row" | "source">, message: string, warning = false, field?: string) =>
-    issues.push({ code, row: candidate.row, source: candidate.source, message, warning, field });
+  const add = (code: string, candidate: Pick<Candidate, "row" | "source">, message: string, warning = false, field?: string,
+    incompletePhases?: boolean) => issues.push({ code, row: candidate.row, source: candidate.source, message, warning, field, incompletePhases });
   if (!candidates.length) add("Error_c", { source: "Datensatz" }, "Der Datensatz enthält keine Standorte.");
 
   for (const candidate of candidates) {
     const { data } = candidate;
+    const checkCatalogs = () => catalogIssues(data, catalogs, (code, message, warning, field) => add(code, candidate, message, warning, field));
     if (!featureValid(data)) {
       const seen = new Set<string>();
       for (const error of featureValid.errors ?? []) {
@@ -179,6 +203,7 @@ export function validate(candidates: Candidate[], catalogs: Catalogs): { feature
         seen.add(message);
         add("Error_c", candidate, message, false, schemaField(error));
       }
+      checkCatalogs();
       continue;
     }
     if (!validGeometry(data.geometry)) {
@@ -193,25 +218,11 @@ export function validate(candidates: Candidate[], catalogs: Catalogs): { feature
       const key = `${p.merge_id}/${p.report_date}`;
       if (points.has(key)) add("Error_c", candidate, "Der Baumstandort ist für diesen Berichtszeitpunkt doppelt erfasst.");
       points.add(key);
-      if (!catalogs.species.has(p.species)) {
-        add("Error_a", candidate, `„${p.species}“: Bitte geben Sie Gattungs- und Artnamen nach den Bestimmungen aus der Dokumentation ein. Achten Sie auch auf Tippfehler.`, false, "species");
-      }
-      if (catalogs.excluded.has(p.species.toLowerCase())) {
-        const warning = p.intervention_ident === "B4";
-        add(warning ? "Hinweis" : "Error_b", candidate, warning
-          ? `„${p.species}“ steht auf der Liste nicht förderfähiger Gehölze; für B.4 ist dies nur ein Hinweis.`
-          : `„${p.species}“ steht auf der Liste nicht förderfähiger Gehölze für B.2 und B.3EB. Bitte reichen Sie nur förderfähige Gehölze ein.`, warning, "species");
-      }
+      checkCatalogs();
       continue;
     }
 
-    const grades = catalogs.biotopes.get(p.biotope_code);
-    if (!grades) add("Error_c", candidate, `Biotoptyp-Code „${p.biotope_code}“ ist nicht in der Referenzliste enthalten.`, false, "biotope_code");
-    else if (!grades.includes(p.biotope_grade)) {
-      add("Error_c", candidate, `Biotopwert für „${p.biotope_code}“: zulässige Werte sind ${grades.join(", ")}.`, false, "biotope_grade");
-    } else if (grades.length > 1) {
-      add("Hinweis", candidate, `Für „${p.biotope_code}“ sind mehrere Biotopwerte hinterlegt (${grades.join(", ")}). Bitte prüfen Sie den gewählten Wert ${p.biotope_grade}.`, true, "biotope_grade");
-    }
+    checkCatalogs();
     const group = areas.get(p.merge_id) ?? { reports: new Map<Phase, Report>(), rows: [] };
     const report = group.reports.get(p.phase) ?? { date: p.report_date, parts: [], numbers: new Set<number>() };
     if (report.date !== p.report_date) add("Error_c", candidate, "Alle Teilflächen einer Phase müssen denselben Berichtszeitpunkt haben.", false, "report_date");
@@ -224,21 +235,30 @@ export function validate(candidates: Candidate[], catalogs: Catalogs): { feature
   }
 
   for (const [id, { reports, rows }] of areas) {
-    const groupError = (message: string) => {
+    const groupIssue = (message: string, incompletePhases = false) => {
+      const warning = incompletePhases && allowIncompletePhases;
       const editable = rows.filter(row => row.row !== undefined);
-      for (const row of editable.length ? editable : [{ source: id }]) add("Error_c", row, message);
+      for (const row of editable.length ? editable : [{ source: id }]) add(warning ? "Hinweis" : "Error_c", row, message, warning, undefined, incompletePhases);
     };
     const missing = phases.filter(phase => !reports.has(phase));
     if (missing.length) {
-      groupError(`Fehlende Berichtsphasen: ${missing.map(phase => phaseLabels[phase]).join(", ")}.`);
+      groupIssue(`Fehlende Berichtsphasen: ${missing.map(phase => phaseLabels[phase]).join(", ")}. Ergänzen Sie diese vor dem Export.`, true);
       continue;
     }
     const [pre, post, prog] = phases.map(phase => weightedGrade(reports.get(phase)!.parts)) as
       [ReturnType<typeof weightedGrade>, ReturnType<typeof weightedGrade>, ReturnType<typeof weightedGrade>];
     if (pre.weighted * post.total >= post.weighted * pre.total || post.weighted * prog.total >= prog.weighted * post.total) {
       const format = new Intl.NumberFormat("de-DE", { maximumFractionDigits: 4 });
-      groupError(`Die flächengewichteten Biotopwerte müssen strikt steigen (vorher < nachher < Prognose): ${[pre, post, prog].map(p => format.format(p.mean)).join(" / ")}.`);
+      groupIssue(`Die flächengewichteten Biotopwerte müssen strikt steigen (vorher < nachher < Prognose): ${[pre, post, prog].map(p => format.format(p.mean)).join(" / ")}.`);
     }
+
   }
   return { features, issues };
+}
+
+export function validateNewLocation(draft: Candidate & { row: string }, existing: Candidate[], catalogs: Catalogs) {
+  const id = (data: unknown) => isRecord(data) && isRecord(data.properties) ? data.properties.merge_id : undefined;
+  const merge = id(draft.data);
+  const related = typeof merge === "string" && merge ? existing.filter(candidate => id(candidate.data) === merge) : [];
+  return validate([...related, draft], catalogs, { allowIncompletePhases: true }).issues.filter(issue => issue.row === draft.row);
 }

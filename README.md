@@ -1,6 +1,6 @@
 # Natürlicher Klimaschutz in Kommunen (NKK444)
 
-Der deutschsprachige Standortvalidator verbindet die Leaflet-Karte mit einer bearbeitbaren Attributtabelle. Er prüft die Angaben direkt bei Änderungen, unterstützt gemischte Geometrien und bietet standardmäßig ein ZIP mit GeoJSON und erneut importierbarer Excel-Arbeitsmappe. Das bestehende FZ-Tool und seine Dokumentation sind auf der Startseite verlinkt.
+Der deutschsprachige Standortvalidator verbindet die Leaflet-Karte mit einer kompakten Standortliste und bearbeitbaren Standortdetails. Neue Standorte werden bereits im Eingabeformular geprüft. Das Tool unterstützt gemischte Geometrien und bietet standardmäßig ein ZIP mit GeoJSON und erneut importierbarer Excel-Arbeitsmappe. Das bestehende FZ-Tool und seine Dokumentation sind auf der Startseite verlinkt.
 
 ### Lokal starten
 
@@ -18,7 +18,7 @@ Die im Terminal ausgegebene Adresse im Browser öffnen. `npm test` prüft Schema
 
 Die folgenden Abschnitte halten die ursprünglichen fachlichen Anforderungen fest. Bei abweichenden Spaltennamen oder Formaten gilt die oben verlinkte Beschreibung des implementierten Modells.
 
-Für eine öffentliche Bereitstellung vorab die Nutzungsbedingungen des [Kartenhintergrunds](https://operations.osmfoundation.org/policies/tiles/) und der [Ortssuche](https://operations.osmfoundation.org/policies/nominatim/) prüfen. `VITE_GEOCODER_URL` erlaubt beim Build einen anderen Nominatim-kompatiblen Suchendpunkt. Der OpenStreetMap-Hintergrund ist erst nach Aktivierung sichtbar.
+OpenStreetMap ist beim Start aktiv. Als Alternative kann im Tool [Esri World Imagery](https://hub.arcgis.com/datasets/esri::world-imagery/about) oder „Ohne Hintergrundkarte“ gewählt werden. Google Maps und Google Satellite öffnen den aktuellen Kartenausschnitt als externe Ansichten. Für eine öffentliche Bereitstellung vorab die Nutzungsbedingungen der Kartenanbieter und der [Ortssuche](https://operations.osmfoundation.org/policies/nominatim/) prüfen. `VITE_GEOCODER_URL` erlaubt beim Build einen anderen Nominatim-kompatiblen Suchendpunkt.
 
 ## Fachliche Anforderungen
 

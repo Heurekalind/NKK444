@@ -1,21 +1,17 @@
-import { attributeInput, describeFields } from "./attributes.ts";
-import { labelFor } from "./model.ts";
-import { geometryLabels, geometryType, rowProperties, stringCell } from "./records.ts";
+import { phaseLabels } from "./model.ts";
+import { geometryLabels, geometryType, isPhase, rowProperties, stringCell } from "./records.ts";
 import { button, element } from "./ui.ts";
-import { attributeKeys } from "./workbook.ts";
 import type { Issue } from "./model.ts";
 import type { WorkspaceRow } from "./records.ts";
 
 const pageSize = 30;
-const keys = ["merge_id", ...attributeKeys.filter(key => key !== "merge_id")];
-
 export function createTable(root: HTMLElement, actions: {
-  select: (key: string) => void; zoom: (key: string) => void; change: (row: WorkspaceRow, key: string, value: string) => void;
+  select: (key: string) => void; zoom: (key: string) => void;
 }) {
   const table = element("table");
   const head = element("thead");
   const header = element("tr");
-  for (const name of ["Standort", "Geometrie", "Prüfung", ...keys.map(labelFor)]) {
+  for (const name of ["Standort", "Prüfung", "Karte"]) {
     const label = element("th", name);
     label.scope = "col";
     header.append(label);
@@ -33,28 +29,32 @@ export function createTable(root: HTMLElement, actions: {
   let selected: string | undefined;
   let page = 0;
   let diagnostics = new Map<string, Issue[]>();
-  type View = { row: WorkspaceRow; node: HTMLTableRowElement; notes: HTMLTableCellElement; coordinates: HTMLTableCellElement;
-    controls: Map<string, HTMLInputElement>; select: HTMLButtonElement };
+  type View = { row: WorkspaceRow; node: HTMLTableRowElement; status: HTMLTableCellElement;
+    description: HTMLElement; select: HTMLButtonElement; zoom: HTMLButtonElement };
   const displayed = new Map<string, View>();
 
   function decorate() {
     for (const [id, view] of displayed) {
       const issues = diagnostics.get(id) ?? [];
-      const hasError = issues.some(issue => !issue.warning);
+      const errors = issues.filter(issue => !issue.warning && !issue.incompletePhases).length;
+      const warnings = issues.filter(issue => issue.warning).length;
+      const pending = issues.some(issue => issue.incompletePhases);
       const properties = rowProperties(view.row);
-      const select = selected === id;
-      view.node.classList.toggle("selected-row", select);
-      view.node.classList.toggle("invalid-row", hasError);
-      view.select.setAttribute("aria-pressed", String(select));
-      view.notes.replaceChildren(...(issues.length ? issues.map(issue =>
-        element("div", `${issue.code}: ${issue.message}`, issue.warning ? "warning-text" : "error-text")) : [element("span", "Gültig")]));
-      view.coordinates.classList.toggle("invalid-cell", issues.some(issue => !issue.warning && issue.field === "geometry"));
-      for (const [key, input] of view.controls) {
-        if (input !== document.activeElement) input.value = stringCell(properties[key]);
-        const error = issues.find(issue => !issue.warning && issue.field === key);
-        input.setAttribute("aria-invalid", String(!!error));
-        input.title = error?.message ?? "";
-      }
+      const type = geometryType(view.row);
+      const title = stringCell(properties.merge_id) || view.row.source;
+      view.select.textContent = title;
+      view.zoom.setAttribute("aria-label", `Auf ${title} zoomen`);
+      view.description.textContent = [type ? geometryLabels[type] : "Keine gültige Geometrie",
+        isPhase(properties.phase) ? `${phaseLabels[properties.phase]} · Teilfläche ${stringCell(properties.subarea_number) || "–"}` : stringCell(properties.species)]
+        .filter(Boolean).join(" · ");
+      view.node.classList.toggle("selected-row", selected === id);
+      view.node.classList.toggle("invalid-row", errors > 0);
+      view.select.setAttribute("aria-pressed", String(selected === id));
+      view.status.textContent = errors ? `${errors} Fehler` : pending ? "Phasen fehlen" :
+        warnings ? `${warnings} ${warnings === 1 ? "Hinweis" : "Hinweise"}` : "Gültig";
+      view.status.classList.toggle("error-text", errors > 0);
+      view.status.classList.toggle("warning-text", !errors && (pending || warnings > 0));
+      view.zoom.disabled = issues.some(issue => issue.field === "geometry" && !issue.warning);
     }
   }
 
@@ -64,39 +64,27 @@ export function createTable(root: HTMLElement, actions: {
     if (!listed.length) {
       const row = element("tr");
       const empty = element("td", "Keine Standorte sichtbar. Zeichnen Sie auf der Karte oder laden Sie eine Datei.");
-      empty.colSpan = keys.length + 3;
+      empty.colSpan = 3;
       row.append(empty);
       body.append(row);
     }
     for (const row of listed.slice(page * pageSize, (page + 1) * pageSize)) {
       const node = element("tr");
       const select = button(row.source, () => actions.select(row.row), "row-select");
+      select.setAttribute("aria-controls", "location-details");
       const zoom = button("⌕", () => actions.zoom(row.row), "zoom-feature");
-      zoom.setAttribute("aria-label", `Auf ${row.source} zoomen`);
       zoom.title = "Auf Standort zoomen";
       const name = element("td");
-      name.append(select, zoom);
-      const type = geometryType(row);
-      const coordinates = element("td", type ? geometryLabels[type] : "Fehlt / ungültig");
-      const notes = element("td", "", "row-notes");
-      node.append(name, coordinates, notes);
-      const allowed = type ? describeFields(type === "Point") : keys;
-      const controls = new Map<string, HTMLInputElement>();
-      for (const key of keys) {
-        const cell = element("td");
-        if (allowed.includes(key)) {
-          const input = attributeInput(key, rowProperties(row)[key], type === "Point", ` · ${row.source}`);
-          input.addEventListener("input", () => actions.change(row, key, input.value));
-          input.addEventListener("focus", () => actions.select(row.row));
-          controls.set(key, input);
-          cell.append(input);
-        } else cell.textContent = "–";
-        node.append(cell);
-      }
+      const description = element("small", "", "row-description");
+      name.append(select, description);
+      const status = element("td", "", "row-status");
+      const map = element("td");
+      map.append(zoom);
+      node.append(name, status, map);
       node.addEventListener("click", event => {
-        if (event.target instanceof HTMLTableCellElement) actions.select(row.row);
+        if (!(event.target instanceof HTMLButtonElement)) actions.select(row.row);
       });
-      displayed.set(row.row, { row, node, notes, coordinates, controls, select });
+      displayed.set(row.row, { row, node, status, description, select, zoom });
       body.append(node);
     }
     counter.textContent = listed.length
@@ -131,6 +119,9 @@ export function createTable(root: HTMLElement, actions: {
         draw();
       }
       displayed.get(key)?.node.scrollIntoView({ block: "nearest", inline: "nearest" });
+    },
+    focus(key: string) {
+      displayed.get(key)?.select.focus();
     },
   };
 }

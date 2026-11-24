@@ -22,12 +22,19 @@
       </details>
       <div class="workspace">
         <section class="panel attribute-panel" aria-labelledby="table-title">
-          <h2 id="table-title">Attributtabelle</h2>
-          <p>Änderungen werden sofort geprüft. Wählen Sie einen Standort in der Tabelle oder auf der Karte aus.</p>
+          <h2 id="table-title">Standorte</h2>
+          <p>Wählen Sie einen Standort in der Liste oder auf der Karte, um seine Attribute und Prüfergebnisse zu sehen.</p>
           <div id="table-filters"></div>
-          <div id="table-scroll" class="table-scroll" role="region" aria-label="Bearbeitbare Standortdaten" tabindex="0"></div>
-          <div id="selection-actions" class="button-row"></div>
+          <div id="table-scroll" class="table-scroll" role="region" aria-label="Standortübersicht" tabindex="0"></div>
         </section>
+        <aside class="panel detail-panel" id="location-details" aria-labelledby="detail-title" hidden>
+          <div class="detail-header">
+            <h2 id="detail-title">Standortdetails</h2>
+            <button type="button" id="close-details" aria-label="Standortdetails schließen">Schließen</button>
+          </div>
+          <div id="detail-fields"></div>
+          <div id="selection-actions" class="button-row"></div>
+        </aside>
         <section class="panel map-panel" aria-labelledby="map-title">
           <div class="map-header">
             <h2 id="map-title">Karte</h2>
@@ -53,8 +60,21 @@
           </div>
           <div id="map" aria-label="Karte der Maßnahmenstandorte"></div>
           <div class="map-footer">
-            <label><input id="tiles" type="checkbox"> OpenStreetMap-Hintergrund anzeigen</label>
-            <small>Beim Aktivieren wird der Kartenausschnitt an OpenStreetMap übertragen. Standortdateien bleiben im Browser.</small>
+            <div class="button-row basemaps">
+              <label for="basemap">Hintergrundkarte</label>
+              <select id="basemap">
+                <option value="osm" selected>OpenStreetMap</option>
+                <option value="esri">Esri Satellit</option>
+                <option value="none">Ohne Hintergrundkarte</option>
+              </select>
+            </div>
+            <div class="button-row basemap-links">
+              <span>Kartenausschnitt extern öffnen:</span>
+              <a id="google-roadmap" target="_blank" rel="noopener noreferrer">Google Maps ↗</a>
+              <a id="google-satellite" target="_blank" rel="noopener noreferrer">Google Satellite ↗</a>
+            </div>
+            <small id="basemap-status" role="status" hidden></small>
+            <small>Beim Laden einer Hintergrundkarte oder Öffnen eines externen Links wird der Kartenausschnitt an den jeweiligen Anbieter übermittelt. Standortdateien bleiben im Browser.</small>
           </div>
         </section>
       </div>

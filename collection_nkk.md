@@ -5,6 +5,8 @@ Für die Einreichung wird **ETRS89 / UTM Zone 32N (EPSG:25832)** verwendet. Die 
 
 Im [Standortvalidator](./validation_nkk.md) können Sie die Standorte ohne separate GIS-Software erfassen. Zeichnen Sie einen Punkt, eine Linie oder eine Fläche und füllen Sie anschließend das Attributformular aus. Für mehrere Geometriebestandteile einer Teilfläche wählen Sie deren Zeile aus und verwenden „Linie hinzufügen“ oder „Fläche hinzufügen“.
 
+Um eine Fläche zu schließen, setzen Sie mindestens drei Eckpunkte und klicken oder tippen Sie anschließend in die Nähe des markierten Startpunkts. Beim Annähern mit der Maus wird der Startpunkt hervorgehoben und die Schließkante eingeblendet. Alternativ wählen Sie „Fläche schließen“.
+
 ## Punktreferenzierte Maßnahmen
 Folgende Maßnahmen können als Punktreferenz angegeben werden:
 * Maßnahme B.2 – Straßenbaumpflanzung

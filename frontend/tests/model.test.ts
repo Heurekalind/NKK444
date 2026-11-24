@@ -5,7 +5,7 @@ import { readSheet } from "read-excel-file/node";
 import writeXlsxFile from "write-excel-file/node";
 import { projectedCollection } from "../src/geojson.ts";
 import { readAreaPhase, readCanonical, readPointRows } from "../src/imports.ts";
-import { collection, collectionValid, makeCatalogs, mergeId, normalizeWinding, validate } from "../src/model.ts";
+import { collection, collectionValid, makeCatalogs, mergeId, normalizeWinding, validate, validateNewLocation } from "../src/model.ts";
 import { attributeMatch, changeAttribute, changeGeometry } from "../src/records.ts";
 import { exportWorkbook, readWorkbookRows } from "../src/workbook.ts";
 import type { Feature, Geometry, Phase } from "../src/model.ts";
@@ -153,4 +153,28 @@ test("editing imported rows updates cell diagnostics without losing geometry or 
   assert.deepEqual(after.issues, []);
   assert.equal(after.features[0]?.properties.merge_id, "7_B2_2025_00007");
   assert.deepEqual(after.features[0]?.geometry.coordinates, [13.42, 52.51]);
+});
+
+test("new location drafts flag unknown species and missing numbers immediately, and reject duplicate points", () => {
+  const row = { row: "draft", source: "Punkt", data: point("B2", "Quercus rober") };
+  changeAttribute(row, "diameter", "");
+  const issues = validateNewLocation(row, [], catalogs);
+  assert.ok(issues.some(issue => issue.field === "diameter" && /Pflichtfeld/.test(issue.message)));
+  assert.ok(issues.some(issue => issue.field === "species" && issue.code === "Error_a"));
+  changeAttribute(row, "species", "Quercus robur");
+  changeAttribute(row, "diameter", "12");
+  assert.deepEqual(validateNewLocation(row, [], catalogs), []);
+  const duplicate = validateNewLocation(row, [{ source: "Existing", row: "other", data: point() }], catalogs);
+  assert.ok(duplicate.some(issue => !issue.warning && /doppelt/.test(issue.message)));
+});
+
+test("phase drafts can be added in sequence while export still requires a complete and improving series", () => {
+  const pre = { row: "pre", source: "Vorher", data: area("pre", "02.01.01.02", 15) };
+  const post = { row: "post", source: "Nachher", data: area("post", "02.01.01.01", 17) };
+  const prog = { row: "prog", source: "Prognose", data: area("prog", "02.01.01.01", 17) };
+  assert.ok(validateNewLocation(pre, [], catalogs).some(issue => issue.warning && issue.incompletePhases));
+  assert.ok(validate([pre], catalogs).issues.some(issue => !issue.warning && issue.incompletePhases));
+  assert.ok(validateNewLocation(prog, [pre, post], catalogs).some(issue => !issue.warning && /strikt steigen/.test(issue.message)));
+  prog.data = area("prog", "02.01.01.01.02", 19);
+  assert.deepEqual(validateNewLocation(prog, [pre, post], catalogs), []);
 });

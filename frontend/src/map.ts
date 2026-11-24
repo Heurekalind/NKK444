@@ -8,8 +8,51 @@ import type { MapRow } from "./records.ts";
 export type DrawType = "Point" | "Polygon" | "LineString";
 const colors = { pre: "#9b4717", post: "#007861", prog: "#6347bb", point: "#184eb5", unknown: "#566366" };
 const germany: L.LatLngExpression = [51.16, 10.45];
+const polygonSnapPixels = 16;
 const position = (latlng: L.LatLng): Position => [Number(latlng.lng.toFixed(7)), Number(latlng.lat.toFixed(7))];
 const latLng = ([lng, lat]: Position): L.LatLngTuple => [lat, lng];
+
+function addBasemaps(map: L.Map) {
+  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  });
+  const esriService = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer";
+  const esri = L.tileLayer(`${esriService}/tile/{z}/{y}/{x}`, {
+    attribution: `<a href="${esriService}">Esri World Imagery</a> · Esri, Vantor, Earthstar Geographics und GIS User Community`,
+  });
+  const picker = byId("basemap", "select");
+  const status = byId("basemap-status", "small");
+  let active: L.TileLayer | undefined;
+  for (const layer of [osm, esri]) {
+    layer.on("tileerror", () => {
+      if (layer !== active) return;
+      status.textContent = "Einige Kartenkacheln konnten nicht geladen werden. Die Standortdaten bleiben verfügbar.";
+      status.hidden = false;
+    });
+  }
+  function setBasemap() {
+    active?.remove();
+    status.hidden = true;
+    active = picker.value === "osm" ? osm : picker.value === "esri" ? esri : undefined;
+    active?.addTo(map);
+  }
+  const roadmap = byId("google-roadmap", "a");
+  const satellite = byId("google-satellite", "a");
+  function googleLinks() {
+    const { lat, lng } = map.getCenter().wrap();
+    const center = `${lat.toFixed(6)},${lng.toFixed(6)}`;
+    const zoom = String(Math.round(map.getZoom()));
+    for (const [link, basemap] of [[roadmap, "roadmap"], [satellite, "satellite"]] as const) {
+      const url = new URL("https://www.google.com/maps/@");
+      url.search = new URLSearchParams({ api: "1", map_action: "map", center, zoom, basemap }).toString();
+      link.href = url.href;
+    }
+  }
+  picker.addEventListener("change", setBasemap);
+  map.on("moveend", googleLinks);
+  setBasemap();
+  googleLinks();
+}
 
 export function createMap(onSelect: (key: string) => void) {
   const node = byId("map", "div");
@@ -17,19 +60,15 @@ export function createMap(onSelect: (key: string) => void) {
   L.control.zoom({ zoomInTitle: "Vergrößern", zoomOutTitle: "Verkleinern" }).addTo(map);
   const layers = L.featureGroup().addTo(map);
   const sketch = L.layerGroup().addTo(map);
-  const tiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  });
-  byId("tiles", "input").addEventListener("change", event => {
-    if ((event.currentTarget as HTMLInputElement).checked) tiles.addTo(map);
-    else tiles.remove();
-  });
+  addBasemaps(map);
   const controls = byId("drawing", "div");
   const hint = byId("drawing-hint", "span");
   const finish = byId("finish-drawing", "button");
   type Drawing = { type: DrawType; positions: Position[]; onDraw: (geometry: Geometry) => void };
   let drawing: Drawing | undefined;
   let editing: { geometry: Geometry; onDraw: Drawing["onDraw"] } | undefined;
+  let startMarker: L.CircleMarker | undefined;
+  let closingEdge: L.Polyline | undefined;
   const byKey = new Map<string, L.GeoJSON>();
 
   function show(rows: MapRow[], selected: string | undefined) {
@@ -43,7 +82,7 @@ export function createMap(onSelect: (key: string) => void) {
         pointToLayer: (_, ll) => L.circleMarker(ll, { color, radius: active ? 10 : 7, fillOpacity: 0.75, bubblingMouseEvents: false }),
       }).bindTooltip(element("span", row.label));
       layer.on("click", (event: L.LeafletMouseEvent) => {
-        if (drawing) addPosition(event.latlng);
+        if (drawing) addPosition(event.latlng, event.containerPoint);
         else if (!editing) onSelect(row.key);
       });
       byKey.set(row.key, layer);
@@ -52,6 +91,7 @@ export function createMap(onSelect: (key: string) => void) {
     if (selected) byKey.get(selected)?.bringToFront();
   }
   function fit(key?: string) {
+    map.invalidateSize();
     const bounds = key ? byKey.get(key)?.getBounds() : layers.getBounds();
     if (!bounds) return;
     if (bounds.isValid()) map.fitBounds(bounds, { maxZoom: 16, padding: [28, 28] });
@@ -60,15 +100,19 @@ export function createMap(onSelect: (key: string) => void) {
     drawing = undefined;
     editing = undefined;
     sketch.clearLayers();
+    startMarker = undefined;
+    closingEdge = undefined;
     controls.hidden = true;
-    node.classList.remove("is-drawing");
+    node.classList.remove("is-drawing", "is-snapped");
     map.invalidateSize();
   }
   function startDraw(type: DrawType, onDraw: (geometry: Geometry) => void) {
     stopDraw();
     drawing = { type, onDraw, positions: [] };
     hint.textContent = type === "Point" ? "Klicken Sie auf den Baumstandort."
-      : `Klicken Sie nacheinander auf die ${type === "Polygon" ? "Eckpunkte der Fläche" : "Stützpunkte der Linie"}.`;
+      : type === "Polygon" ? "Setzen Sie mindestens drei Eckpunkte. Klicken oder tippen Sie zum Schließen wieder auf den markierten Startpunkt."
+      : "Klicken Sie nacheinander auf die Stützpunkte der Linie.";
+    finish.textContent = type === "Polygon" ? "Fläche schließen" : "Zeichnung übernehmen";
     finish.hidden = type === "Point";
     finish.disabled = true;
     controls.hidden = false;
@@ -84,6 +128,7 @@ export function createMap(onSelect: (key: string) => void) {
     editing = { geometry: draft, onDraw };
     controls.hidden = false;
     hint.textContent = "Ziehen Sie die markierten Stützpunkte und übernehmen Sie anschließend die Geometrie.";
+    finish.textContent = "Zeichnung übernehmen";
     finish.hidden = false;
     finish.disabled = false;
     const shape = L.geoJSON(draft, {
@@ -116,8 +161,25 @@ export function createMap(onSelect: (key: string) => void) {
     node.scrollIntoView({ block: "nearest" });
   }
 
-  const addPosition = (ll: L.LatLng) => {
+  function polygonStartNear(point: L.Point) {
+    return drawing?.type === "Polygon" && drawing.positions.length >= 3 &&
+      point.distanceTo(map.latLngToContainerPoint(latLng(drawing.positions[0]!))) <= polygonSnapPixels;
+  }
+
+  function highlightSnap(active: boolean) {
+    if (node.classList.contains("is-snapped") === active) return;
+    node.classList.toggle("is-snapped", active);
+    startMarker?.setRadius(active ? 10 : 6).setStyle({ color: active ? "#006451" : "#1252b8" });
+    if (active && closingEdge) closingEdge.addTo(sketch);
+    else if (closingEdge) sketch.removeLayer(closingEdge);
+  }
+
+  const addPosition = (ll: L.LatLng, point = map.latLngToContainerPoint(ll)) => {
     if (!drawing) return;
+    if (polygonStartNear(point)) {
+      finishDrawing();
+      return;
+    }
     const next = position(ll.wrap());
     if (drawing.type === "Point") {
       const done = drawing.onDraw;
@@ -127,17 +189,33 @@ export function createMap(onSelect: (key: string) => void) {
     }
     if (drawing.positions.some(p => p[0] === next[0] && p[1] === next[1])) return;
     drawing.positions.push(next);
+    highlightSnap(false);
     sketch.clearLayers();
-    L.polyline(drawing.positions.map(latLng), { color: "#1252b8", dashArray: "5 5", interactive: false }).addTo(sketch);
-    for (const p of drawing.positions) L.circleMarker(latLng(p), { radius: 4, color: "#1252b8", interactive: false }).addTo(sketch);
+    const points = drawing.positions.map(latLng);
+    L.polyline(points, { color: "#1252b8", dashArray: "5 5", interactive: false }).addTo(sketch);
+    points.forEach((at, index) => {
+      const start = index === 0 && drawing?.type === "Polygon";
+      const marker = L.circleMarker(at, {
+        radius: start ? 6 : 4, color: "#1252b8", fillOpacity: start ? 1 : 0.2,
+        fillColor: start ? "#fff" : "#1252b8", interactive: false,
+        className: start ? "polygon-start" : undefined,
+      }).addTo(sketch);
+      if (start) startMarker = marker;
+    });
+    if (drawing.type === "Polygon" && points.length >= 3) {
+      closingEdge = L.polyline([points.at(-1)!, points[0]!], { color: "#006451", dashArray: "5 5", interactive: false });
+    }
     finish.disabled = drawing.positions.length < (drawing.type === "Polygon" ? 3 : 2);
   };
-  map.on("click", event => addPosition(event.latlng));
+  map.on("click", (event: L.LeafletMouseEvent) => addPosition(event.latlng, event.containerPoint));
+  node.addEventListener("pointermove", event => highlightSnap(polygonStartNear(map.mouseEventToContainerPoint(event))));
+  node.addEventListener("pointerleave", () => highlightSnap(false));
+  map.on("movestart zoomstart", () => highlightSnap(false));
   node.addEventListener("keydown", event => {
     if ((drawing || editing) && event.key === "Escape") stopDraw();
     if (drawing && event.key === "Enter" && event.target === node) addPosition(map.getCenter());
   });
-  finish.addEventListener("click", () => {
+  function finishDrawing() {
     if (editing) {
       const { geometry, onDraw } = editing;
       stopDraw();
@@ -149,10 +227,11 @@ export function createMap(onSelect: (key: string) => void) {
     stopDraw();
     if (type === "LineString") onDraw({ type, coordinates: positions });
     if (type === "Polygon") onDraw({ type, coordinates: [[...positions, positions[0]!]] });
-  });
+  }
+  finish.addEventListener("click", finishDrawing);
   byId("cancel-drawing", "button").addEventListener("click", stopDraw);
   byId("fit", "button").addEventListener("click", () => fit());
-  new ResizeObserver(() => map.invalidateSize({ pan: false })).observe(node);
+  new ResizeObserver(() => map.invalidateSize({ debounceMoveend: true })).observe(node);
 
   const search = byId("search", "form");
   const query = byId("place-query", "input");

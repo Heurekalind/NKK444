@@ -28,14 +28,18 @@ export const stringCell = (value: unknown) => typeof value === "number" && Numbe
 export const isPhase = (value: unknown): value is Phase => phases.some(phase => value === phase);
 
 export function changeAttribute(row: WorkspaceRow, key: string, value: string) {
-  const properties = { ...rowProperties(row), [key]: key === "nkk_objectnumber" ? objectNumber(value) : attributeValue(key, value) };
+  const properties = { ...rowProperties(row) };
+  if (!value.trim()) delete properties[key];
+  else properties[key] = key === "nkk_objectnumber" ? objectNumber(value) : attributeValue(key, value);
   if (isIdentity(key)) {
-    properties.merge_id = identity.every(name => stringCell(properties[name]) !== "") ? mergeId({
-      grant_number: Number(properties.grant_number),
-      nkk_objectnumber: String(properties.nkk_objectnumber),
-      intervention_ident: String(properties.intervention_ident),
-      start_intervention: Number(properties.start_intervention),
-    } satisfies Identity) : "";
+    if (identity.every(name => stringCell(properties[name]) !== "")) {
+      properties.merge_id = mergeId({
+        grant_number: Number(properties.grant_number),
+        nkk_objectnumber: String(properties.nkk_objectnumber),
+        intervention_ident: String(properties.intervention_ident),
+        start_intervention: Number(properties.start_intervention),
+      } satisfies Identity);
+    } else delete properties.merge_id;
   }
   row.data = { type: "Feature", ...(isRecord(row.data) ? row.data : {}), properties };
 }

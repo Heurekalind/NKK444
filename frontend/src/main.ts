@@ -3,10 +3,10 @@ import speciesUrl from "../../Genus_species_global_tree_search_clean.csv?url";
 import excludedCsv from "../../excluded_plants.csv?raw";
 import biotopeCsv from "../../biotope_codes.csv?raw";
 import pointTemplate from "../../NKK444_point_data_template.xlsx?url";
-import { describeFields, installDatalists, openAttributes } from "./attributes.ts";
+import { createAttributeDetails, describeFields, installDatalists, openAttributes, updateDependentAttributes } from "./attributes.ts";
 import { readAreaPhase, readCanonical, readPointRows } from "./imports.ts";
 import { createMap } from "./map.ts";
-import { drawableGeometry, errorText, labelFor, makeCatalogs, phaseLabels, phases, validate } from "./model.ts";
+import { areaMeasures, drawableGeometry, errorText, labelFor, makeCatalogs, phaseLabels, phases, pointMeasures, validate, validateNewLocation } from "./model.ts";
 import { exportResult } from "./output.ts";
 import { attributeMatch, changeAttribute, changeGeometry, geometryType, isPhase, removeObsoleteFields, rowGeometry, rowProperties, stringCell } from "./records.ts";
 import { createTable } from "./table.ts";
@@ -42,6 +42,8 @@ async function start() {
   const downloads = byId("downloads", "fieldset");
   const exportMessage = byId("export-message", "p");
   const issuesList = byId("issues", "ul");
+  const details = byId("location-details", "aside");
+  const detailFields = byId("detail-fields", "div");
   const selectionActions = byId("selection-actions", "div");
   let editable: WorkspaceRow[] = [];
   let sourceErrors: Issue[] = [];
@@ -53,6 +55,8 @@ async function start() {
   let originalExcel: { file: File; version: number } | undefined;
   let lastSelection: WorkspaceRow | undefined;
   let selectionShape = "";
+  let detailPoint: boolean | undefined;
+  let refreshDetails: ((issues: Issue[]) => void) | undefined;
   const zipGeoJson = byId("zip-geojson", "input");
   const zipExcel = byId("zip-excel", "input");
   const zipButton = downloads.querySelector<HTMLButtonElement>("[data-export=zip]")!;
@@ -63,18 +67,13 @@ async function start() {
   const table = createTable(byId("table-scroll", "div"), {
     select: key => select(key, false),
     zoom: key => { select(key, false); map.fit(key); },
-    change(row, key, value) {
-      changeAttribute(row, key, value);
-      if (key === "biotope_code") {
-        const grades = catalogs.biotopes.get(value.trim());
-        const previous = rowProperties(row).biotope_grade;
-        if (grades?.length === 1) changeAttribute(row, "biotope_grade", String(grades[0]));
-        else if (!grades?.includes(Number(previous))) changeAttribute(row, "biotope_grade", "");
-      }
-      update(true, false, row.row);
-    },
   });
-  byId("table-scroll", "div").addEventListener("change", () => refreshViews());
+  byId("close-details", "button").addEventListener("click", () => {
+    const key = selected;
+    selected = undefined;
+    refreshViews();
+    if (key) table.focus(key);
+  });
 
   const filterHost = byId("table-filters", "div");
   const filters = element("div");
@@ -119,18 +118,36 @@ async function start() {
     });
     map.show(rows, selected);
     const row = filtered.find(row => row.row === selected);
+    const rowIssues = row ? checked.issues.filter(issue => issue.row === row.row) : [];
     const geometry = row ? drawableGeometry(rowGeometry(row)) : null;
     const storedType = row ? geometryType(row) : undefined;
-    const allowed = storedType ? describeFields(storedType === "Point") : attributeKeys;
+    const properties = row ? rowProperties(row) : {};
+    const measure = stringCell(properties.intervention_ident);
+    const point = storedType ? storedType === "Point" : Object.hasOwn(properties, "species") || pointMeasures.includes(measure)
+      ? true : Object.hasOwn(properties, "phase") || areaMeasures.includes(measure) ? false : undefined;
+    if (row && (row !== lastSelection || point !== detailPoint)) {
+      detailPoint = point;
+      refreshDetails = createAttributeDetails(detailFields, row, point, catalogs, (key, value) => {
+        changeAttribute(row, key, value);
+        updateDependentAttributes(row, key, catalogs);
+        update(true, false, row.row);
+      });
+    } else if (!row) {
+      detailFields.replaceChildren();
+      refreshDetails = undefined;
+    }
+    details.hidden = !row;
+    details.parentElement?.classList.toggle("has-details", !!row);
+    refreshDetails?.(rowIssues);
+    const allowed = point === undefined ? attributeKeys : describeFields(point);
     const repair = row && (Object.keys(rowProperties(row)).some(key => !allowed.includes(key)) ||
-      checked.issues.some(issue => issue.row === row.row && issue.message.endsWith("unbekanntes Feld")));
-    const shape = `${storedType}/${geometry?.type}/${Boolean(repair)}`;
+      rowIssues.some(issue => issue.message.endsWith("unbekanntes Feld")));
+    const shape = `${point}/${storedType}/${geometry?.type}/${Boolean(repair)}`;
     if (!force && row === lastSelection && shape === selectionShape) return;
     lastSelection = row;
     selectionShape = shape;
     selectionActions.replaceChildren();
     if (!row) return;
-    const point = storedType === "Point" || (!storedType && Object.hasOwn(rowProperties(row), "species"));
     const applyGeometry = (newGeometry: Geometry) => { changeGeometry(row, newGeometry); update(true, true); };
     if (geometry) {
       selectionActions.append(button("Stützpunkte bearbeiten", () => {
@@ -138,7 +155,7 @@ async function start() {
         map.editGeometry(geometry, applyGeometry);
       }));
     }
-    const options: DrawType[] = point ? ["Point"] : storedType || Object.hasOwn(rowProperties(row), "phase")
+    const options: DrawType[] = point ? ["Point"] : point === false
       ? ["LineString", "Polygon"] : ["Point", "LineString", "Polygon"];
     for (const option of options) {
       selectionActions.append(button(`${drawTypes[option]} neu zeichnen`, () => map.startDraw(option, applyGeometry)));
@@ -169,19 +186,23 @@ async function start() {
       refreshViews(false, key);
     }
     if (reveal) table.reveal(key);
+    else if (!details.hidden) details.scrollIntoView({ block: "nearest", behavior: "instant" });
   }
 
   function update(changed = true, force = false, retain?: string) {
     if (changed) version++;
     const result = editable.length ? validate(editable, catalogs) : { features: [], issues: [] };
     checked = { ...result, issues: [...sourceErrors, ...result.issues] };
-    const errors = checked.issues.filter(issue => !issue.warning).length;
-    const rowErrors = new Set(checked.issues.filter(issue => !issue.warning && issue.row).map(issue => issue.row)).size;
+    const errors = checked.issues.filter(issue => !issue.warning && !issue.incompletePhases).length;
+    const rowErrors = new Set(checked.issues.filter(issue => !issue.warning && !issue.incompletePhases && issue.row).map(issue => issue.row)).size;
+    const pending = checked.issues.some(issue => issue.incompletePhases);
     const warnings = checked.issues.filter(issue => issue.warning).length;
-    downloads.disabled = exporting || errors > 0 || !checked.features.length;
+    downloads.disabled = exporting || errors > 0 || pending || !checked.features.length;
     summary.textContent = errors
       ? `${errors} Fehler in der Prüfung (${rowErrors} betroffene Standorte) · ${warnings} Hinweise. Export gesperrt.`
-      : !editable.length ? "Noch keine Standorte zur Prüfung." : `Prüfung bestanden: ${editable.length} Standorte · ${warnings} Hinweise.`;
+      : pending ? "Berichtsphasen fehlen. Ergänzen Sie diese, um den Export freizuschalten."
+      : !editable.length ? "Noch keine Standorte zur Prüfung."
+      : `Prüfung bestanden: ${editable.length} ${editable.length === 1 ? "Standort" : "Standorte"} · ${warnings} ${warnings === 1 ? "Hinweis" : "Hinweise"}.`;
     if (!exporting) exportMessage.textContent = "";
     const global = checked.issues.filter(issue => !issue.row);
     issuesList.replaceChildren(...global.map(issue => element("li", `${issue.code} · ${issue.source}: ${issue.message}`, "error-text")));
@@ -194,7 +215,7 @@ async function start() {
       if (type !== "Point" && type !== "LineString" && type !== "Polygon") return;
       map.startDraw(type, geometry => {
         const row = bindRow({ source: `${drawTypes[type]} ${sequence + 1}`, data: { type: "Feature", geometry, properties: {} } });
-        openAttributes(dialog, row, geometry, catalogs, item => {
+        openAttributes(dialog, row, geometry, catalogs, () => validateNewLocation(row, editable, catalogs), item => {
           editable.push(item);
           selected = item.row;
           update(true, false, item.row);
