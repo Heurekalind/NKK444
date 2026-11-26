@@ -1,0 +1,32 @@
+{
+  "name": "nkk444-location-validator",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": { "node": "^22.18.0 || >=24.0.0" },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "ajv": "^8.18.0",
+    "ajv-formats": "^3.0.1",
+    "fflate": "^0.8.3",
+    "leaflet": "^1.9.4",
+    "markdown-it": "^14.2.0",
+    "papaparse": "^5.5.3",
+    "proj4": "^2.20.0",
+    "read-excel-file": "^9.3.20",
+    "write-excel-file": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21",
+    "@types/markdown-it": "^14.1.2",
+    "@types/papaparse": "^5.3.16",
+    "tsx": "^4.21.0",
+    "typescript": "latest",
+    "vite": "^7.3.8"
+  }
+}
